@@ -80,7 +80,7 @@ export default function AdminDashboard() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-display text-2xl text-white mb-1">Dashboard</h1>
+        <h1 className="font-extrabold text-2xl text-white mb-1">Dashboard</h1>
         <p className="text-gray-500 text-sm">Visão geral do seu negócio</p>
       </div>
 
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
                 </span>
               )}
             </div>
-            <p className="font-display text-2xl text-white mb-1">{card.value}</p>
+            <p className="font-bold text-2xl text-white mb-1">{card.value}</p>
             <p className="text-gray-500 text-xs">{card.sub}</p>
           </div>
         ))}
@@ -115,7 +115,7 @@ export default function AdminDashboard() {
 
       {/* Order Status Pipeline */}
       <div className="bg-[#111] border border-[#222] rounded-2xl p-6 mb-8">
-        <h2 className="font-display text-lg mb-5">Pipeline de Pedidos</h2>
+        <h2 className="font-bold text-lg mb-5">Pipeline de Pedidos</h2>
         <div className="grid grid-cols-5 gap-3">
           {[
             { label: 'Novo', count: statusCounts.novo, color: '#3B82F6' },
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
                   }}
                 />
               </div>
-              <p className="font-display text-lg" style={{ color: s.color }}>{s.count}</p>
+              <p className="font-bold text-lg" style={{ color: s.color }}>{s.count}</p>
               <p className="text-gray-500 text-xs">{s.label}</p>
             </div>
           ))}
@@ -146,7 +146,7 @@ export default function AdminDashboard() {
 
       {/* Recent Orders */}
       <div className="bg-[#111] border border-[#222] rounded-2xl p-6">
-        <h2 className="font-display text-lg mb-5">Pedidos Recentes</h2>
+        <h2 className="font-bold text-lg mb-5">Pedidos Recentes</h2>
         {orders.length === 0 ? (
           <p className="text-gray-500 text-sm text-center py-8">Nenhum pedido ainda</p>
         ) : (
@@ -169,7 +169,7 @@ export default function AdminDashboard() {
                   <p className="text-xs text-gray-500">{order.id.slice(-6).toUpperCase()} - {order.items?.length || 0} itens</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-brand text-sm font-bold">
+                  <p className="text-orange-400 text-sm font-bold">
                     R$ {(order.total / 100).toFixed(2).replace('.', ',')}
                   </p>
                   <p className="text-gray-600 text-xs">

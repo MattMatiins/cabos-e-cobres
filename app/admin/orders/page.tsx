@@ -72,7 +72,7 @@ export default function AdminOrders() {
     <div>
       <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
         <div>
-          <h1 className="font-display text-2xl text-white mb-1">Pedidos</h1>
+          <h1 className="font-extrabold text-2xl text-white mb-1">Pedidos</h1>
           <p className="text-gray-500 text-sm">{orders.length} pedidos no total</p>
         </div>
       </div>
@@ -114,7 +114,7 @@ export default function AdminOrders() {
                 key={order.id}
                 onClick={() => { setSelected(order); setTrackingCode(order.trackingCode || ''); }}
                 className={`bg-[#111] border rounded-xl p-4 cursor-pointer transition-all hover:border-[#333] ${
-                  selected?.id === order.id ? 'border-brand/40' : 'border-[#222]'
+                  selected?.id === order.id ? 'border-orange-500/40' : 'border-[#222]'
                 }`}
               >
                 <div className="flex items-center gap-4">
@@ -145,7 +145,7 @@ export default function AdminOrders() {
                     </p>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <p className="text-brand font-bold text-sm">
+                    <p className="text-orange-400 font-bold text-sm">
                       R$ {(order.total / 100).toFixed(2).replace('.', ',')}
                     </p>
                     <p className="text-gray-600 text-xs">
@@ -163,7 +163,7 @@ export default function AdminOrders() {
           <div className="lg:col-span-2">
             <div className="bg-[#111] border border-[#222] rounded-2xl p-6 sticky top-8">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="font-display text-lg">
+                <h2 className="font-bold text-lg">
                   #{selected.id.slice(-6).toUpperCase()}
                 </h2>
                 <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-white">
@@ -216,12 +216,12 @@ export default function AdminOrders() {
                     value={trackingCode}
                     onChange={(e) => setTrackingCode(e.target.value)}
                     placeholder="Ex: BR123456789BR"
-                    className="flex-1 bg-[#161616] border border-[#222] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50"
+                    className="flex-1 bg-[#161616] border border-[#222] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50"
                   />
                   <button
                     onClick={() => handleTrackingUpdate(selected.id)}
                     disabled={updating || !trackingCode}
-                    className="px-4 py-2 bg-brand/10 text-brand rounded-lg text-xs font-bold uppercase hover:bg-brand/20 disabled:opacity-50 transition-all"
+                    className="px-4 py-2 bg-orange-500/10 text-orange-400 rounded-lg text-xs font-bold uppercase hover:bg-orange-500/20 disabled:opacity-50 transition-all"
                   >
                     Salvar
                   </button>
@@ -267,7 +267,7 @@ export default function AdminOrders() {
                 </div>
                 <div className="border-t border-[#222] mt-3 pt-3 flex justify-between font-bold">
                   <span>Total</span>
-                  <span className="text-brand">
+                  <span className="text-orange-400">
                     R$ {(selected.total / 100).toFixed(2).replace('.', ',')}
                   </span>
                 </div>

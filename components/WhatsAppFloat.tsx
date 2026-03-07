@@ -6,7 +6,7 @@ export default function WhatsAppFloat() {
       href={`${WHATSAPP_URL}?text=${encodeURIComponent('Olá! Vim pelo site e gostaria de mais informações.')}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-7 right-7 z-[200] w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.4)] hover:scale-110 hover:shadow-[0_6px_30px_rgba(37,211,102,0.5)] transition-all"
+      className="fixed bottom-7 right-7 z-[200] w-14 h-14 bg-[#25D366] rounded-2xl flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.4)] hover:scale-110 hover:shadow-[0_6px_30px_rgba(37,211,102,0.5)] transition-all"
       style={{ animation: 'pulseGlow 2s ease-in-out infinite' }}
       aria-label="Falar no WhatsApp"
     >

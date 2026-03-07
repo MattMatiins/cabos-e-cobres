@@ -47,12 +47,12 @@ function SharedCartContent() {
   return (
     <>
       <div className="text-center mb-10">
-        <div className="w-16 h-16 bg-brand/10 border border-brand/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <svg width={28} height={28} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24" className="text-brand">
+        <div className="w-16 h-16 bg-orange-500/10 border border-orange-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <svg width={28} height={28} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24" className="text-orange-400">
             <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
           </svg>
         </div>
-        <h1 className="font-display text-2xl text-white mb-2">Carrinho Compartilhado</h1>
+        <h1 className="font-extrabold text-2xl text-white mb-2">Carrinho Compartilhado</h1>
         <p className="text-gray-500 text-sm">
           {sharedItems.length > 0
             ? 'Estes itens foram adicionados ao seu carrinho.'
@@ -81,7 +81,7 @@ function SharedCartContent() {
                   <p className="text-sm text-gray-200 line-clamp-2">{item.product.name}</p>
                   <p className="text-xs text-gray-500 mt-0.5">{item.quantity}x {item.product.priceFormatted}</p>
                 </div>
-                <p className="text-brand font-bold text-sm flex-shrink-0">
+                <p className="text-orange-400 font-bold text-sm flex-shrink-0">
                   R$ {((item.product.price * item.quantity) / 100).toFixed(2).replace('.', ',')}
                 </p>
               </div>
@@ -90,7 +90,7 @@ function SharedCartContent() {
 
           <div className="border-t border-[#222] pt-4 flex items-center justify-between">
             <span className="text-gray-400">Total</span>
-            <span className="font-display text-xl text-brand">
+            <span className="font-bold text-xl text-orange-400">
               R$ {(sharedTotal / 100).toFixed(2).replace('.', ',')}
             </span>
           </div>
@@ -100,7 +100,7 @@ function SharedCartContent() {
       <div className="flex flex-col sm:flex-row gap-3">
         <Link
           href="/checkout"
-          className="flex-1 bg-brand text-black text-center py-4 rounded-xl font-bold text-sm tracking-wider uppercase hover:shadow-[0_0_40px_rgba(245,166,35,0.3)] transition-all"
+          className="flex-1 bg-orange-500 text-black text-center py-4 rounded-xl font-bold text-sm tracking-wider uppercase hover:shadow-[0_0_40px_rgba(245,166,35,0.3)] transition-all"
         >
           Finalizar Compra
         </Link>
@@ -118,7 +118,7 @@ function SharedCartContent() {
 function CartLoadingFallback() {
   return (
     <div className="text-center py-20">
-      <div className="w-12 h-12 border-2 border-brand/30 border-t-brand rounded-full animate-spin mx-auto mb-4" />
+      <div className="w-12 h-12 border-2 border-orange-500/30 border-t-orange-500 rounded-full animate-spin mx-auto mb-4" />
       <p className="text-gray-500 text-sm">Carregando carrinho...</p>
     </div>
   );
@@ -126,13 +126,13 @@ function CartLoadingFallback() {
 
 export default function SharedCartPage() {
   return (
-    <div className="min-h-screen bg-surface-primary">
+    <div className="min-h-screen bg-[#0f172a]">
       <header className="border-b border-[#222] bg-[#0a0a0a]/90 backdrop-blur-xl">
         <div className="max-w-3xl mx-auto px-6 flex items-center justify-between h-[72px]">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-brand rounded-lg flex items-center justify-center font-display text-black text-sm">CC</div>
-            <span className="font-display text-[1.1rem] tracking-wider uppercase text-white">
-              Cabos <span className="text-brand">&amp;</span> Cobres
+            <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-black text-sm">CC</div>
+            <span className="font-bold text-[1.1rem] tracking-wider uppercase text-white">
+              Cabos <span className="text-orange-400">&amp;</span> Cobres
             </span>
           </Link>
         </div>

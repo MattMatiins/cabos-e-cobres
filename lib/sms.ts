@@ -10,60 +10,102 @@ function formatMessage(template: string, order: Order): string {
     .replace(/{telefone}/g, order.customerPhone);
 }
 
-export async function sendOrderSMS(order: Order, newStatus: OrderStatus): Promise<boolean> {
+// Generate a WhatsApp link for the admin to send manually
+export function generateWhatsAppLink(order: Order, newStatus: OrderStatus): string {
   const settings = getSettings();
+  const messageKey =
+    newStatus === 'pronto' && order.deliveryMethod === 'retirada'
+      ? 'retirada_pronto'
+      : newStatus;
+  const template = settings.messages[messageKey];
+  const message = formatMessage(template, order);
 
-  if (!settings.smsApiKey || !settings.smsFromNumber) {
-    console.log('[SMS] Não configurado. Mensagem que seria enviada:');
-    const messageKey =
-      newStatus === 'pronto' && order.deliveryMethod === 'retirada'
-        ? 'retirada_pronto'
-        : newStatus;
-    const template = settings.messages[messageKey];
-    const message = formatMessage(template, order);
-    console.log(`[SMS] Para: ${order.customerPhone}`);
-    console.log(`[SMS] Mensagem: ${message}`);
-    return false;
-  }
+  // Format phone for WhatsApp (remove non-digits, ensure country code)
+  let phone = order.customerPhone.replace(/\D/g, '');
+  if (phone.startsWith('0')) phone = phone.slice(1);
+  if (!phone.startsWith('55')) phone = '55' + phone;
 
-  try {
-    const messageKey =
-      newStatus === 'pronto' && order.deliveryMethod === 'retirada'
-        ? 'retirada_pronto'
-        : newStatus;
-    const template = settings.messages[messageKey];
-    const message = formatMessage(template, order);
+  return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+}
 
-    // Twilio API integration
-    const accountSid = settings.smsApiKey.split(':')[0];
-    const authToken = settings.smsApiKey.split(':')[1];
-    const auth = Buffer.from(`${accountSid}:${authToken}`).toString('base64');
+export async function sendOrderNotification(order: Order, newStatus: OrderStatus): Promise<{ sent: boolean; whatsappLink: string }> {
+  const settings = getSettings();
+  const whatsappLink = generateWhatsAppLink(order, newStatus);
 
-    const response = await fetch(
-      `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Basic ${auth}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          From: settings.smsFromNumber,
-          To: order.customerPhone,
-          Body: message,
-        }),
+  const messageKey =
+    newStatus === 'pronto' && order.deliveryMethod === 'retirada'
+      ? 'retirada_pronto'
+      : newStatus;
+  const template = settings.messages[messageKey];
+  const message = formatMessage(template, order);
+
+  // Try CallMeBot WhatsApp API (free) if configured
+  if (settings.smsApiKey && settings.smsApiKey.startsWith('callmebot:')) {
+    try {
+      const apiKey = settings.smsApiKey.replace('callmebot:', '');
+      let phone = order.customerPhone.replace(/\D/g, '');
+      if (phone.startsWith('0')) phone = phone.slice(1);
+      if (!phone.startsWith('55')) phone = '55' + phone;
+
+      const url = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(message)}&apikey=${apiKey}`;
+      const response = await fetch(url);
+
+      if (response.ok) {
+        console.log(`[WhatsApp] Enviado para ${order.customerPhone}: ${message}`);
+        return { sent: true, whatsappLink };
+      } else {
+        console.error('[WhatsApp] Erro CallMeBot:', await response.text());
       }
-    );
-
-    if (!response.ok) {
-      console.error('[SMS] Erro ao enviar:', await response.text());
-      return false;
+    } catch (error) {
+      console.error('[WhatsApp] Erro:', error);
     }
-
-    console.log(`[SMS] Enviado para ${order.customerPhone}: ${message}`);
-    return true;
-  } catch (error) {
-    console.error('[SMS] Erro:', error);
-    return false;
   }
+
+  // Try Twilio SMS if configured (legacy support)
+  if (settings.smsApiKey && settings.smsApiKey.includes(':') && !settings.smsApiKey.startsWith('callmebot:')) {
+    try {
+      const accountSid = settings.smsApiKey.split(':')[0];
+      const authToken = settings.smsApiKey.split(':')[1];
+      const auth = Buffer.from(`${accountSid}:${authToken}`).toString('base64');
+
+      const response = await fetch(
+        `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Basic ${auth}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            From: settings.smsFromNumber,
+            To: order.customerPhone,
+            Body: message,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        console.log(`[SMS] Enviado para ${order.customerPhone}: ${message}`);
+        return { sent: true, whatsappLink };
+      } else {
+        console.error('[SMS] Erro Twilio:', await response.text());
+      }
+    } catch (error) {
+      console.error('[SMS] Erro:', error);
+    }
+  }
+
+  // Fallback: log message and return WhatsApp link for manual send
+  console.log('[Notificação] API não configurada. Use o link do WhatsApp para enviar manualmente:');
+  console.log(`[Notificação] Para: ${order.customerPhone}`);
+  console.log(`[Notificação] Mensagem: ${message}`);
+  console.log(`[Notificação] Link: ${whatsappLink}`);
+
+  return { sent: false, whatsappLink };
+}
+
+// Keep backward compatibility
+export async function sendOrderSMS(order: Order, newStatus: OrderStatus): Promise<boolean> {
+  const result = await sendOrderNotification(order, newStatus);
+  return result.sent;
 }

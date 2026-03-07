@@ -9,8 +9,9 @@ import WhatsAppFloat from '@/components/WhatsAppFloat';
 export default function Home() {
   return (
     <>
-      <div className="bg-gradient-to-r from-brand-dark via-brand to-brand-dark text-black text-center py-2.5 px-4 text-xs font-bold tracking-[0.12em] uppercase">
-        Produtos selecionados especialmente para você! &bull; Envio para todo Brasil
+      {/* Top bar */}
+      <div className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600 text-white text-center py-2.5 px-4 text-xs font-semibold tracking-wider">
+        Frete grátis para São Paulo &bull; Envio para todo Brasil &bull; Peças Originais Bambozzi
       </div>
       <Header />
       <Hero />

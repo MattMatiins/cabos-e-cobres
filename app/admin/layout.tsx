@@ -42,7 +42,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
         <div className="w-full max-w-sm">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-brand rounded-2xl flex items-center justify-center font-display text-black text-xl mx-auto mb-4 shadow-[0_0_40px_rgba(245,166,35,0.3)]">
+            <div className="w-16 h-16 bg-orange-500 rounded-2xl flex items-center justify-center font-display text-black text-xl mx-auto mb-4 shadow-[0_0_40px_rgba(245,166,35,0.3)]">
               CC
             </div>
             <h1 className="font-display text-2xl text-white mb-1">Admin</h1>
@@ -55,13 +55,13 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               placeholder="Senha de acesso"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50 transition-colors"
+              className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors"
               autoFocus
             />
             {error && <p className="text-red-400 text-xs">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-brand text-black py-3 rounded-xl font-bold text-sm tracking-wider uppercase hover:shadow-[0_0_30px_rgba(245,166,35,0.3)] transition-all"
+              className="w-full bg-orange-500 text-black py-3 rounded-xl font-bold text-sm tracking-wider uppercase hover:shadow-[0_0_30px_rgba(245,166,35,0.3)] transition-all"
             >
               Entrar
             </button>
@@ -86,7 +86,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         {/* Sidebar */}
         <aside className={`admin-sidebar border-r border-[#222] flex flex-col transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-16'}`}>
           <div className="p-4 border-b border-[#222] flex items-center gap-3">
-            <div className="w-9 h-9 bg-brand rounded-lg flex items-center justify-center font-display text-black text-xs flex-shrink-0">
+            <div className="w-9 h-9 bg-orange-500 rounded-lg flex items-center justify-center font-display text-black text-xs flex-shrink-0">
               CC
             </div>
             {sidebarOpen && (
@@ -103,7 +103,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                   href={item.href}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                     active
-                      ? 'bg-brand/10 text-brand border border-brand/20'
+                      ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20'
                       : 'text-gray-500 hover:text-white hover:bg-[#1a1a1a]'
                   }`}
                   title={item.label}

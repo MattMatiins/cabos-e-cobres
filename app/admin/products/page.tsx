@@ -27,16 +27,31 @@ const emptyForm: ProductForm = {
 export default function AdminProducts() {
   const { headers } = useAdminAuth();
   const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState<ProductForm>(emptyForm);
   const [saving, setSaving] = useState(false);
 
   async function fetchProducts() {
+    setLoading(true);
+    setError('');
     try {
       const res = await fetch('/api/admin/products', { headers: headers() });
-      if (res.ok) setProducts(await res.json());
-    } catch {}
+      if (res.ok) {
+        const data = await res.json();
+        setProducts(data);
+      } else if (res.status === 401) {
+        setError('Senha de admin incorreta. Faça logout e entre novamente.');
+      } else {
+        setError(`Erro ao carregar produtos (${res.status})`);
+      }
+    } catch (err) {
+      setError('Erro de conexão. Verifique sua internet.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -121,7 +136,7 @@ export default function AdminProducts() {
         </div>
         <button
           onClick={openNew}
-          className="flex items-center gap-2 bg-brand text-black px-5 py-2.5 rounded-xl font-bold text-xs tracking-wider uppercase hover:shadow-[0_0_20px_rgba(245,166,35,0.3)] transition-all"
+          className="flex items-center gap-2 bg-orange-500 text-black px-5 py-2.5 rounded-xl font-bold text-xs tracking-wider uppercase hover:shadow-[0_0_20px_rgba(245,166,35,0.3)] transition-all"
         >
           <svg width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
             <path d="M12 5v14M5 12h14" />
@@ -149,7 +164,7 @@ export default function AdminProducts() {
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50"
+                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50"
               />
               <div className="grid grid-cols-2 gap-3">
                 <input
@@ -157,7 +172,7 @@ export default function AdminProducts() {
                   placeholder="Código"
                   value={form.code}
                   onChange={(e) => setForm({ ...form, code: e.target.value })}
-                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50"
+                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50"
                 />
                 <input
                   type="number"
@@ -166,7 +181,7 @@ export default function AdminProducts() {
                   required
                   value={form.price}
                   onChange={(e) => setForm({ ...form, price: e.target.value })}
-                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50"
+                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50"
                 />
               </div>
               <input
@@ -174,21 +189,21 @@ export default function AdminProducts() {
                 placeholder="Categoria"
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50"
+                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50"
               />
               <textarea
                 placeholder="Descrição"
                 rows={3}
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50 resize-none"
+                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 resize-none"
               />
               <textarea
                 placeholder="URLs das imagens (uma por linha)"
                 rows={3}
                 value={form.images}
                 onChange={(e) => setForm({ ...form, images: e.target.value })}
-                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50 resize-none font-mono text-xs"
+                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 resize-none font-mono text-xs"
               />
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
@@ -204,7 +219,7 @@ export default function AdminProducts() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 bg-brand text-black py-3 rounded-xl font-bold text-sm tracking-wider uppercase disabled:opacity-50"
+                  className="flex-1 bg-orange-500 text-black py-3 rounded-xl font-bold text-sm tracking-wider uppercase disabled:opacity-50"
                 >
                   {saving ? 'Salvando...' : editing ? 'Atualizar' : 'Criar Produto'}
                 </button>
@@ -221,8 +236,26 @@ export default function AdminProducts() {
         </>
       )}
 
+      {/* Loading */}
+      {loading && (
+        <div className="text-center py-20">
+          <div className="w-10 h-10 border-2 border-brand/30 border-t-brand rounded-full animate-spin mx-auto mb-4" style={{ animation: 'spin 1s linear infinite' }} />
+          <p className="text-gray-500 text-sm">Carregando produtos...</p>
+        </div>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-6 text-center mb-6">
+          <p className="text-red-400 text-sm mb-3">{error}</p>
+          <button onClick={fetchProducts} className="text-orange-400 text-xs font-bold uppercase tracking-wider hover:underline">
+            Tentar Novamente
+          </button>
+        </div>
+      )}
+
       {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      {!loading && <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {products.map((product) => (
           <div key={product.id} className="bg-[#111] border border-[#222] rounded-xl overflow-hidden hover:border-[#333] transition-all group">
             <div className="aspect-square bg-[#0e0e0e] relative overflow-hidden">
@@ -251,7 +284,7 @@ export default function AdminProducts() {
             <div className="p-4">
               <p className="text-gray-500 text-[0.65rem] tracking-wider mb-1">Cód. {product.code}</p>
               <h3 className="text-sm font-medium text-gray-200 line-clamp-2 mb-2">{product.name}</h3>
-              <p className="text-brand font-display text-lg mb-3">{product.priceFormatted}</p>
+              <p className="text-orange-400 font-display text-lg mb-3">{product.priceFormatted}</p>
               <div className="flex gap-2">
                 <button
                   onClick={() => openEdit(product)}
@@ -271,7 +304,7 @@ export default function AdminProducts() {
             </div>
           </div>
         ))}
-      </div>
+      </div>}
     </div>
   );
 }

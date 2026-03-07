@@ -80,16 +80,16 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-surface-primary flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[#0f172a] flex items-center justify-center px-4">
         <div className="text-center max-w-md">
           <div className="w-20 h-20 bg-[#1a1a1a] rounded-full flex items-center justify-center mx-auto mb-6">
             <svg width={36} height={36} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" className="text-gray-600">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
             </svg>
           </div>
-          <h1 className="font-display text-2xl text-white mb-3">Carrinho Vazio</h1>
+          <h1 className="font-extrabold text-2xl text-white mb-3">Carrinho Vazio</h1>
           <p className="text-gray-500 mb-8">Adicione produtos ao carrinho para continuar.</p>
-          <Link href="/" className="inline-flex items-center gap-2 bg-brand text-black px-8 py-3 rounded-full font-bold text-sm uppercase tracking-wider">
+          <Link href="/" className="inline-flex items-center gap-2 bg-orange-500 text-black px-8 py-3 rounded-full font-bold text-sm uppercase tracking-wider">
             Ver Produtos
           </Link>
         </div>
@@ -98,13 +98,13 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-primary">
+    <div className="min-h-screen bg-[#0f172a]">
       <header className="border-b border-[#222] bg-[#0a0a0a]/90 backdrop-blur-xl">
         <div className="max-w-5xl mx-auto px-6 flex items-center justify-between h-[72px]">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-brand rounded-lg flex items-center justify-center font-display text-black text-sm">CC</div>
-            <span className="font-display text-[1.1rem] tracking-wider uppercase text-white">
-              Cabos <span className="text-brand">&amp;</span> Cobres
+            <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-black text-sm">CC</div>
+            <span className="font-bold text-[1.1rem] tracking-wider uppercase text-white">
+              Cabos <span className="text-orange-400">&amp;</span> Cobres
             </span>
           </Link>
           <span className="text-gray-500 text-sm">Finalizar Compra</span>
@@ -117,22 +117,22 @@ export default function CheckoutPage() {
           <div className="lg:col-span-3 space-y-8">
             {/* Delivery Method */}
             <div>
-              <h2 className="font-display text-lg mb-4 flex items-center gap-3">
-                <span className="w-8 h-8 bg-brand/10 border border-brand/20 rounded-lg flex items-center justify-center text-brand text-sm font-bold">1</span>
+              <h2 className="font-bold text-lg mb-4 flex items-center gap-3">
+                <span className="w-8 h-8 bg-orange-500/10 border border-orange-500/20 rounded-lg flex items-center justify-center text-orange-400 text-sm font-bold">1</span>
                 Método de Entrega
               </h2>
               <div className="grid grid-cols-2 gap-3">
                 <button type="button" onClick={() => setDeliveryMethod('entrega')}
-                  className={`p-4 rounded-xl border-2 text-left transition-all ${deliveryMethod === 'entrega' ? 'border-brand bg-brand/5' : 'border-[#222] hover:border-[#333]'}`}>
-                  <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24" className={deliveryMethod === 'entrega' ? 'text-brand' : 'text-gray-500'}>
+                  className={`p-4 rounded-xl border-2 text-left transition-all ${deliveryMethod === 'entrega' ? 'border-orange-500 bg-orange-500/5' : 'border-[#222] hover:border-[#333]'}`}>
+                  <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24" className={deliveryMethod === 'entrega' ? 'text-orange-400' : 'text-gray-500'}>
                     <path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8zM5.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM18.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
                   </svg>
                   <p className="font-bold text-sm mt-2">Entrega</p>
                   <p className="text-gray-500 text-xs mt-1">Receba no seu endereço</p>
                 </button>
                 <button type="button" onClick={() => setDeliveryMethod('retirada')}
-                  className={`p-4 rounded-xl border-2 text-left transition-all ${deliveryMethod === 'retirada' ? 'border-brand bg-brand/5' : 'border-[#222] hover:border-[#333]'}`}>
-                  <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24" className={deliveryMethod === 'retirada' ? 'text-brand' : 'text-gray-500'}>
+                  className={`p-4 rounded-xl border-2 text-left transition-all ${deliveryMethod === 'retirada' ? 'border-orange-500 bg-orange-500/5' : 'border-[#222] hover:border-[#333]'}`}>
+                  <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24" className={deliveryMethod === 'retirada' ? 'text-orange-400' : 'text-gray-500'}>
                     <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
                   </svg>
                   <p className="font-bold text-sm mt-2">Retirada</p>
@@ -151,21 +151,21 @@ export default function CheckoutPage() {
 
             {/* Contact Info */}
             <div>
-              <h2 className="font-display text-lg mb-4 flex items-center gap-3">
-                <span className="w-8 h-8 bg-brand/10 border border-brand/20 rounded-lg flex items-center justify-center text-brand text-sm font-bold">2</span>
+              <h2 className="font-bold text-lg mb-4 flex items-center gap-3">
+                <span className="w-8 h-8 bg-orange-500/10 border border-orange-500/20 rounded-lg flex items-center justify-center text-orange-400 text-sm font-bold">2</span>
                 Dados de Contato
               </h2>
               <div className="space-y-3">
                 <input type="text" placeholder="Nome completo" required value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50 transition-colors" />
+                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <input type="email" placeholder="E-mail" required value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50 transition-colors" />
+                    className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" />
                   <input type="tel" placeholder="Telefone (com DDD)" required value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50 transition-colors" />
+                    className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" />
                 </div>
 
                 {deliveryMethod === 'entrega' && (
@@ -174,12 +174,12 @@ export default function CheckoutPage() {
                     <div className="flex gap-3">
                       <input type="text" placeholder="CEP (ex: 15000-000)" maxLength={9} value={form.cep}
                         onChange={(e) => handleCepChange(e.target.value)}
-                        className="w-40 bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50 transition-colors" />
+                        className="w-40 bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" />
                       <div className="flex-1 flex items-center px-4 rounded-xl bg-[#161616] border border-[#222]">
                         {shippingLoading ? (
                           <span className="text-gray-500 text-xs">Calculando...</span>
                         ) : shipping ? (
-                          <span className={`text-xs font-bold ${shipping.price === 0 ? 'text-green-400' : 'text-brand'}`}>
+                          <span className={`text-xs font-bold ${shipping.price === 0 ? 'text-green-400' : 'text-orange-400'}`}>
                             {shipping.priceFormatted} — {shipping.message}
                           </span>
                         ) : (
@@ -189,7 +189,7 @@ export default function CheckoutPage() {
                     </div>
                     <input type="text" placeholder="Endereço completo (Rua, Número, Bairro, Cidade - UF)" required
                       value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })}
-                      className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50 transition-colors" />
+                      className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" />
                   </>
                 )}
               </div>
@@ -199,7 +199,7 @@ export default function CheckoutPage() {
           {/* Right - Summary */}
           <div className="lg:col-span-2">
             <div className="bg-[#111] border border-[#222] rounded-2xl p-6 sticky top-24">
-              <h2 className="font-display text-lg mb-5">Resumo do Pedido</h2>
+              <h2 className="font-bold text-lg mb-5">Resumo do Pedido</h2>
               <div className="space-y-3 mb-6 max-h-60 overflow-y-auto">
                 {items.map((item) => (
                   <div key={item.product.id} className="flex gap-3">
@@ -214,7 +214,7 @@ export default function CheckoutPage() {
                           <span className="text-xs w-5 text-center">{item.quantity}</span>
                           <button type="button" onClick={() => updateQuantity(item.product.id, item.quantity + 1)} className="w-6 h-6 rounded bg-[#222] text-gray-400 flex items-center justify-center text-xs hover:bg-[#333]">+</button>
                         </div>
-                        <span className="text-brand text-xs font-bold">
+                        <span className="text-orange-400 text-xs font-bold">
                           R$ {((item.product.price * item.quantity) / 100).toFixed(2).replace('.', ',')}
                         </span>
                       </div>
@@ -237,14 +237,14 @@ export default function CheckoutPage() {
                     {deliveryMethod === 'retirada' ? 'Grátis (retirada)' : shipping ? shipping.priceFormatted : 'Informe CEP'}
                   </span>
                 </div>
-                <div className="flex justify-between font-display text-lg pt-2 border-t border-[#222]">
+                <div className="flex justify-between font-bold text-lg pt-2 border-t border-[#222]">
                   <span>Total</span>
-                  <span className="text-brand">R$ {(grandTotal / 100).toFixed(2).replace('.', ',')}</span>
+                  <span className="text-orange-400">R$ {(grandTotal / 100).toFixed(2).replace('.', ',')}</span>
                 </div>
               </div>
 
               <button type="submit" disabled={loading}
-                className="w-full mt-6 bg-brand text-black py-4 rounded-xl font-bold text-sm tracking-wider uppercase hover:shadow-[0_0_40px_rgba(245,166,35,0.3)] transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+                className="w-full mt-6 bg-orange-500 text-black py-4 rounded-xl font-bold text-sm tracking-wider uppercase hover:shadow-[0_0_40px_rgba(245,166,35,0.3)] transition-all disabled:opacity-50 flex items-center justify-center gap-2">
                 {loading ? (
                   <>
                     <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full" style={{ animation: 'spin 1s linear infinite' }} />

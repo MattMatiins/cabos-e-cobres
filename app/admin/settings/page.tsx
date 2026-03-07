@@ -82,7 +82,7 @@ export default function AdminSettings() {
   if (!settings) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-2 border-brand/30 border-t-brand rounded-full" style={{ animation: 'spin 1s linear infinite' }} />
+        <div className="w-8 h-8 border-2 border-orange-500/30 border-t-orange-500 rounded-full" style={{ animation: 'spin 1s linear infinite' }} />
       </div>
     );
   }
@@ -90,7 +90,7 @@ export default function AdminSettings() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-display text-2xl text-white mb-1">Configurações</h1>
+        <h1 className="font-extrabold text-2xl text-white mb-1">Configurações</h1>
         <p className="text-gray-500 text-sm">Stripe, SMS, frete e mensagens personalizadas</p>
       </div>
 
@@ -103,7 +103,7 @@ export default function AdminSettings() {
       <form onSubmit={handleSave} className="max-w-2xl space-y-8">
         {/* Stripe */}
         <div className="bg-[#111] border border-[#222] rounded-2xl p-6">
-          <h2 className="font-display text-lg mb-1 flex items-center gap-3">
+          <h2 className="font-bold text-lg mb-1 flex items-center gap-3">
             <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
               <rect x={1} y={4} width={22} height={16} rx={2} ry={2} /><line x1={1} y1={10} x2={23} y2={10} />
             </svg>
@@ -118,7 +118,7 @@ export default function AdminSettings() {
                 value={settings.stripeSecretKey || ''}
                 onChange={(e) => setSettings({ ...settings, stripeSecretKey: e.target.value })}
                 placeholder="sk_live_..."
-                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50 font-mono"
+                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 font-mono"
               />
             </div>
             <div>
@@ -128,7 +128,7 @@ export default function AdminSettings() {
                 value={settings.stripePublishableKey || ''}
                 onChange={(e) => setSettings({ ...settings, stripePublishableKey: e.target.value })}
                 placeholder="pk_live_..."
-                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50 font-mono"
+                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 font-mono"
               />
             </div>
           </div>
@@ -136,7 +136,7 @@ export default function AdminSettings() {
 
         {/* Shipping */}
         <div className="bg-[#111] border border-[#222] rounded-2xl p-6">
-          <h2 className="font-display text-lg mb-1 flex items-center gap-3">
+          <h2 className="font-bold text-lg mb-1 flex items-center gap-3">
             <svg width={20} height={20} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
               <path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8zM5.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM18.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
             </svg>
@@ -167,7 +167,7 @@ export default function AdminSettings() {
 
         {/* SMS */}
         <div className="bg-[#111] border border-[#222] rounded-2xl p-6">
-          <h2 className="font-display text-lg mb-1 flex items-center gap-3">
+          <h2 className="font-bold text-lg mb-1 flex items-center gap-3">
             <svg width={20} height={20} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
               <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
             </svg>
@@ -182,7 +182,7 @@ export default function AdminSettings() {
                 value={settings.smsApiKey || ''}
                 onChange={(e) => setSettings({ ...settings, smsApiKey: e.target.value })}
                 placeholder="ACxxxxxxx:xxxxxxxx"
-                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50 font-mono"
+                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 font-mono"
               />
             </div>
             <div>
@@ -192,7 +192,7 @@ export default function AdminSettings() {
                 value={settings.smsFromNumber || ''}
                 onChange={(e) => setSettings({ ...settings, smsFromNumber: e.target.value })}
                 placeholder="+5517999999999"
-                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50"
+                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50"
               />
             </div>
           </div>
@@ -200,7 +200,7 @@ export default function AdminSettings() {
 
         {/* Messages */}
         <div className="bg-[#111] border border-[#222] rounded-2xl p-6">
-          <h2 className="font-display text-lg mb-1 flex items-center gap-3">
+          <h2 className="font-bold text-lg mb-1 flex items-center gap-3">
             <svg width={20} height={20} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
               <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
@@ -232,7 +232,7 @@ export default function AdminSettings() {
                       messages: { ...settings.messages, [msg.key]: e.target.value },
                     })
                   }
-                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand/50 resize-none"
+                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 resize-none"
                 />
               </div>
             ))}
@@ -240,7 +240,7 @@ export default function AdminSettings() {
           <button
             type="button"
             onClick={() => setSettings({ ...settings, messages: { ...DEFAULT_MESSAGES } })}
-            className="mt-3 text-gray-500 text-xs hover:text-brand transition-colors"
+            className="mt-3 text-gray-500 text-xs hover:text-orange-400 transition-colors"
           >
             Restaurar mensagens padrão
           </button>
@@ -251,7 +251,7 @@ export default function AdminSettings() {
           <button
             type="submit"
             disabled={saving}
-            className="bg-brand text-black px-8 py-3 rounded-xl font-bold text-sm tracking-wider uppercase hover:shadow-[0_0_30px_rgba(245,166,35,0.3)] disabled:opacity-50 transition-all flex items-center gap-2"
+            className="bg-orange-500 text-black px-8 py-3 rounded-xl font-bold text-sm tracking-wider uppercase hover:shadow-[0_0_30px_rgba(245,166,35,0.3)] disabled:opacity-50 transition-all flex items-center gap-2"
           >
             {saving ? (
               <>

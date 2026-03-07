@@ -25,11 +25,12 @@ export default function ProductCard({ product, index }: { product: Product; inde
 
   return (
     <div
-      className="perspective-container product-card-stagger opacity-0"
-      style={{ animation: `cardIn 0.6s ease-out ${0.05 + index * 0.05}s forwards` }}
+      className="product-card-stagger opacity-0"
+      style={{ animation: `fadeUp 0.5s ease-out ${0.05 + index * 0.04}s forwards` }}
     >
-      <div className="product-card card-3d bg-surface-card border border-[#222] rounded-[14px] overflow-hidden hover:border-[#333] hover:shadow-[0_8px_32px_rgba(0,0,0,0.5),0_0_60px_rgba(245,166,35,0.1)] group">
-        <div className="product-img-wrapper relative">
+      <div className="product-card bg-[#1e293b] border border-white/5 rounded-2xl overflow-hidden group">
+        {/* Image */}
+        <div className="product-img-wrapper relative bg-[#0f172a]">
           {!imgError ? (
             <Image
               src={product.images[0]}
@@ -41,7 +42,7 @@ export default function ProductCard({ product, index }: { product: Product; inde
               unoptimized
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-[#111] text-gray-600">
+            <div className="w-full h-full flex items-center justify-center bg-slate-800 text-slate-600">
               <svg width={48} height={48} fill="none" stroke="currentColor" strokeWidth={1} viewBox="0 0 24 24">
                 <rect x={3} y={3} width={18} height={18} rx={2} />
                 <circle cx={8.5} cy={8.5} r={1.5} />
@@ -50,12 +51,13 @@ export default function ProductCard({ product, index }: { product: Product; inde
             </div>
           )}
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+          {/* Hover overlay - desktop */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/90 via-[#0f172a]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-          <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 max-sm:hidden">
+          <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 max-sm:hidden">
             <button
               onClick={handleAddToCart}
-              className={`flex-1 ${added ? 'bg-green-500' : 'bg-brand'} text-black rounded-xl py-3 font-bold text-xs tracking-wider uppercase hover:brightness-110 transition-all font-[inherit] flex items-center justify-center gap-2`}
+              className={`flex-1 ${added ? 'bg-green-500' : 'bg-orange-500 hover:bg-orange-600'} text-white rounded-xl py-3 font-bold text-xs tracking-wider uppercase transition-all flex items-center justify-center gap-2`}
             >
               {added ? (
                 <>
@@ -64,7 +66,7 @@ export default function ProductCard({ product, index }: { product: Product; inde
                 </>
               ) : (
                 <>
-                  <svg width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" /></svg>
+                  <svg width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg>
                   Adicionar
                 </>
               )}
@@ -80,24 +82,42 @@ export default function ProductCard({ product, index }: { product: Product; inde
             </button>
           </div>
 
-          <div className="absolute top-3 left-3 bg-brand/90 text-black text-[0.65rem] font-bold tracking-wider uppercase px-3 py-1 rounded-full backdrop-blur-sm">
-            Em Estoque
+          {/* Stock badge */}
+          {product.inStock && (
+            <div className="absolute top-3 left-3 bg-green-500/90 text-white text-[0.6rem] font-bold tracking-wider uppercase px-2.5 py-1 rounded-lg backdrop-blur-sm">
+              Em Estoque
+            </div>
+          )}
+
+          {/* Category badge */}
+          <div className="absolute top-3 right-3 bg-slate-900/80 text-slate-300 text-[0.6rem] font-medium tracking-wider px-2.5 py-1 rounded-lg backdrop-blur-sm">
+            {product.category}
           </div>
         </div>
 
+        {/* Content */}
         <div className="p-5">
-          <p className="text-gray-600 text-[0.7rem] tracking-[0.1em] uppercase mb-1.5">Cód. {product.code}</p>
-          <h3 className="font-medium text-[0.9rem] text-gray-100 mb-3 line-clamp-2 leading-relaxed">{product.name}</h3>
-          <div className="font-display text-xl text-brand">
-            {product.priceFormatted}
-            <span className="block text-[0.7rem] text-gray-500 font-body font-normal mt-0.5">à vista no PIX</span>
+          <p className="text-slate-500 text-[0.7rem] tracking-[0.1em] uppercase mb-1.5 font-medium">
+            Cód. {product.code}
+          </p>
+          <h3 className="font-semibold text-[0.9rem] text-slate-100 mb-3 line-clamp-2 leading-relaxed">
+            {product.name}
+          </h3>
+          <div className="flex items-end justify-between">
+            <div>
+              <div className="font-extrabold text-xl text-orange-400">
+                {product.priceFormatted}
+              </div>
+              <span className="text-[0.7rem] text-slate-500 font-medium mt-0.5 block">à vista no PIX</span>
+            </div>
           </div>
         </div>
 
+        {/* Mobile buttons */}
         <div className="flex gap-2 px-5 pb-5 sm:hidden">
           <button
             onClick={handleAddToCart}
-            className={`flex-1 ${added ? 'bg-green-500' : 'bg-brand'} text-black rounded-xl py-3 font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 transition-colors`}
+            className={`flex-1 ${added ? 'bg-green-500' : 'bg-orange-500'} text-white rounded-xl py-3 font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 transition-colors`}
           >
             {added ? (
               <>

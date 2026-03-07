@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getOrders, getOrder, updateOrder } from '@/lib/store';
-import { sendOrderSMS } from '@/lib/sms';
+import { sendOrderNotification } from '@/lib/sms';
 import type { OrderStatus } from '@/lib/types';
 
 function checkAdminAuth(req: NextRequest): boolean {
@@ -52,12 +52,14 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: 'Erro ao atualizar' }, { status: 500 });
     }
 
-    // Send SMS notification on status change
+    // Send notification on status change
+    let whatsappLink = '';
     if (status && status !== existing.status) {
-      await sendOrderSMS(updated, status);
+      const result = await sendOrderNotification(updated, status);
+      whatsappLink = result.whatsappLink;
     }
 
-    return NextResponse.json(updated);
+    return NextResponse.json({ ...updated, whatsappLink });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
