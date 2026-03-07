@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
-import { getProducts } from '@/lib/store';
-import { createOrder, getSettings } from '@/lib/store';
+import { getProducts, createOrder, getSettings } from '@/lib/store';
 import type { DeliveryMethod, Order } from '@/lib/types';
 
 // ── Stripe Checkout ──────────────────────────────────────────────
@@ -91,7 +90,7 @@ async function createMercadoPagoCheckout(
 
   if (mpItems.length === 0) throw new Error('Nenhum produto válido');
 
-  const preference = {
+  const preference: any = {
     items: mpItems,
     payer: {
       name: customerName,
@@ -105,8 +104,12 @@ async function createMercadoPagoCheckout(
     },
     auto_return: 'approved',
     statement_descriptor: 'CABOS E COBRES',
-    notification_url: `${origin}/api/webhooks/mercadopago`,
   };
+
+  // Only add notification_url for production (MP rejects localhost)
+  if (!origin.includes('localhost') && !origin.includes('127.0.0.1')) {
+    preference.notification_url = `${origin}/api/webhooks/mercadopago`;
+  }
 
   const res = await fetch('https://api.mercadopago.com/checkout/preferences', {
     method: 'POST',
@@ -118,9 +121,15 @@ async function createMercadoPagoCheckout(
   });
 
   if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    console.error('Mercado Pago error:', errorData);
-    throw new Error('Erro ao criar checkout no Mercado Pago');
+    const errorText = await res.text().catch(() => '');
+    console.error('Mercado Pago error:', res.status, errorText);
+    let errorMsg = `Erro Mercado Pago (${res.status})`;
+    try {
+      const errorData = JSON.parse(errorText);
+      if (errorData.message) errorMsg = `MP: ${errorData.message}`;
+      if (errorData.cause?.[0]?.description) errorMsg = `MP: ${errorData.cause[0].description}`;
+    } catch {}
+    throw new Error(errorMsg);
   }
 
   const data = await res.json();

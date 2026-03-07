@@ -20,7 +20,7 @@ function getStore(): Store {
       visitors: [],
       products: [...PRODUCTS],
       settings: {
-        paymentGateway: (process.env.MERCADOPAGO_ACCESS_TOKEN ? 'mercadopago' : 'stripe') as any,
+        paymentGateway: (process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY !== 'sk_test_COLE_SUA_CHAVE_AQUI' && !process.env.MERCADOPAGO_ACCESS_TOKEN ? 'stripe' : 'mercadopago') as any,
         stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
         stripePublishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
         mercadoPagoAccessToken: process.env.MERCADOPAGO_ACCESS_TOKEN || '',

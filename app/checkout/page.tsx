@@ -77,10 +77,10 @@ export default function CheckoutPage() {
         clearCart();
         window.location.href = data.url;
       } else {
-        alert('Erro ao processar pagamento. Tente novamente.');
+        alert(data.error || 'Erro ao processar pagamento. Tente novamente.');
       }
     } catch {
-      alert('Erro ao processar pagamento. Tente novamente.');
+      alert('Erro de conexão. Verifique sua internet e tente novamente.');
     } finally {
       setLoading(false);
     }
