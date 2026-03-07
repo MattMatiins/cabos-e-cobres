@@ -92,14 +92,14 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-screen bg-[#0f172a] flex items-center justify-center px-4">
         <div className="text-center max-w-md">
-          <div className="w-20 h-20 bg-[#1a1a1a] rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg width={36} height={36} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" className="text-gray-600">
+          <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg width={36} height={36} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" className="text-slate-600">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
             </svg>
           </div>
           <h1 className="font-extrabold text-2xl text-white mb-3">Carrinho Vazio</h1>
-          <p className="text-gray-500 mb-8">Adicione produtos ao carrinho para continuar.</p>
-          <Link href="/" className="inline-flex items-center gap-2 bg-orange-500 text-black px-8 py-3 rounded-full font-bold text-sm uppercase tracking-wider">
+          <p className="text-slate-500 mb-8">Adicione produtos ao carrinho para continuar.</p>
+          <Link href="/" className="inline-flex items-center gap-2 bg-orange-500 text-white px-8 py-3 rounded-full font-bold text-sm uppercase tracking-wider">
             Ver Produtos
           </Link>
         </div>
@@ -109,15 +109,15 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-[#0f172a]">
-      <header className="border-b border-[#222] bg-[#0a0a0a]/90 backdrop-blur-xl">
+      <header className="border-b border-white/5 bg-[#0f172a]/95 backdrop-blur-xl">
         <div className="max-w-5xl mx-auto px-6 flex items-center justify-between h-[72px]">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-black text-sm">CC</div>
+            <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-white text-sm">CC</div>
             <span className="font-bold text-[1.1rem] tracking-wider uppercase text-white">
               Cabos <span className="text-orange-400">&amp;</span> Cobres
             </span>
           </Link>
-          <span className="text-gray-500 text-sm">Finalizar Compra</span>
+          <span className="text-slate-500 text-sm">Finalizar Compra</span>
         </div>
       </header>
 
@@ -133,20 +133,20 @@ export default function CheckoutPage() {
               </h2>
               <div className="grid grid-cols-2 gap-3">
                 <button type="button" onClick={() => setDeliveryMethod('entrega')}
-                  className={`p-4 rounded-xl border-2 text-left transition-all ${deliveryMethod === 'entrega' ? 'border-orange-500 bg-orange-500/5' : 'border-[#222] hover:border-[#333]'}`}>
-                  <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24" className={deliveryMethod === 'entrega' ? 'text-orange-400' : 'text-gray-500'}>
+                  className={`p-4 rounded-xl border-2 text-left transition-all ${deliveryMethod === 'entrega' ? 'border-orange-500 bg-orange-500/5' : 'border-white/10 hover:border-white/20'}`}>
+                  <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24" className={deliveryMethod === 'entrega' ? 'text-orange-400' : 'text-slate-500'}>
                     <path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8zM5.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM18.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
                   </svg>
                   <p className="font-bold text-sm mt-2">Entrega</p>
-                  <p className="text-gray-500 text-xs mt-1">Receba no seu endereço</p>
+                  <p className="text-slate-500 text-xs mt-1">Receba no seu endereço</p>
                 </button>
                 <button type="button" onClick={() => setDeliveryMethod('retirada')}
-                  className={`p-4 rounded-xl border-2 text-left transition-all ${deliveryMethod === 'retirada' ? 'border-orange-500 bg-orange-500/5' : 'border-[#222] hover:border-[#333]'}`}>
-                  <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24" className={deliveryMethod === 'retirada' ? 'text-orange-400' : 'text-gray-500'}>
+                  className={`p-4 rounded-xl border-2 text-left transition-all ${deliveryMethod === 'retirada' ? 'border-orange-500 bg-orange-500/5' : 'border-white/10 hover:border-white/20'}`}>
+                  <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24" className={deliveryMethod === 'retirada' ? 'text-orange-400' : 'text-slate-500'}>
                     <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
                   </svg>
                   <p className="font-bold text-sm mt-2">Retirada</p>
-                  <p className="text-gray-500 text-xs mt-1">Retire na loja</p>
+                  <p className="text-slate-500 text-xs mt-1">Retire na loja</p>
                 </button>
               </div>
               {deliveryMethod === 'retirada' && (
@@ -168,14 +168,14 @@ export default function CheckoutPage() {
               <div className="space-y-3">
                 <input type="text" placeholder="Nome completo" required value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" />
+                  className="w-full bg-[#1e293b] border border-white/5 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500/50 transition-colors" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <input type="email" placeholder="E-mail" required value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" />
+                    className="w-full bg-[#1e293b] border border-white/5 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500/50 transition-colors" />
                   <input type="tel" placeholder="Telefone (com DDD)" required value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" />
+                    className="w-full bg-[#1e293b] border border-white/5 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500/50 transition-colors" />
                 </div>
 
                 {deliveryMethod === 'entrega' && (
@@ -184,22 +184,22 @@ export default function CheckoutPage() {
                     <div className="flex gap-3">
                       <input type="text" placeholder="CEP (ex: 15000-000)" maxLength={9} value={form.cep}
                         onChange={(e) => handleCepChange(e.target.value)}
-                        className="w-40 bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" />
-                      <div className="flex-1 flex items-center px-4 rounded-xl bg-[#161616] border border-[#222]">
+                        className="w-40 bg-[#1e293b] border border-white/5 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500/50 transition-colors" />
+                      <div className="flex-1 flex items-center px-4 rounded-xl bg-[#1e293b] border border-white/5">
                         {shippingLoading ? (
-                          <span className="text-gray-500 text-xs">Calculando...</span>
+                          <span className="text-slate-500 text-xs">Calculando...</span>
                         ) : shipping ? (
                           <span className={`text-xs font-bold ${shipping.price === 0 ? 'text-green-400' : 'text-orange-400'}`}>
                             {shipping.priceFormatted} — {shipping.message}
                           </span>
                         ) : (
-                          <span className="text-gray-600 text-xs">Informe o CEP para calcular o frete</span>
+                          <span className="text-slate-600 text-xs">Informe o CEP para calcular o frete</span>
                         )}
                       </div>
                     </div>
                     <input type="text" placeholder="Endereço completo (Rua, Número, Bairro, Cidade - UF)" required
                       value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })}
-                      className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" />
+                      className="w-full bg-[#1e293b] border border-white/5 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500/50 transition-colors" />
                   </>
                 )}
               </div>
@@ -208,12 +208,12 @@ export default function CheckoutPage() {
 
           {/* Right - Summary */}
           <div className="lg:col-span-2">
-            <div className="bg-[#111] border border-[#222] rounded-2xl p-6 sticky top-24">
+            <div className="bg-[#1e293b] border border-white/5 rounded-2xl p-6 sticky top-24">
               <h2 className="font-bold text-lg mb-5">Resumo do Pedido</h2>
               <div className="space-y-3 mb-6 max-h-60 overflow-y-auto">
                 {items.map((item) => (
                   <div key={item.product.id} className="flex gap-3">
-                    <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#0e0e0e] flex-shrink-0">
+                    <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#0f172a] flex-shrink-0">
                       {item.product.images[0]?.startsWith('data:') ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
                         <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
@@ -222,47 +222,47 @@ export default function CheckoutPage() {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs text-gray-300 line-clamp-2">{item.product.name}</p>
+                      <p className="text-xs text-slate-300 line-clamp-2">{item.product.name}</p>
                       <div className="flex items-center justify-between mt-1">
                         <div className="flex items-center gap-1">
-                          <button type="button" onClick={() => updateQuantity(item.product.id, item.quantity - 1)} className="w-6 h-6 rounded bg-[#222] text-gray-400 flex items-center justify-center text-xs hover:bg-[#333]">-</button>
+                          <button type="button" onClick={() => updateQuantity(item.product.id, item.quantity - 1)} className="w-6 h-6 rounded bg-slate-700 text-slate-400 flex items-center justify-center text-xs hover:bg-slate-600">-</button>
                           <span className="text-xs w-5 text-center">{item.quantity}</span>
-                          <button type="button" onClick={() => updateQuantity(item.product.id, item.quantity + 1)} className="w-6 h-6 rounded bg-[#222] text-gray-400 flex items-center justify-center text-xs hover:bg-[#333]">+</button>
+                          <button type="button" onClick={() => updateQuantity(item.product.id, item.quantity + 1)} className="w-6 h-6 rounded bg-slate-700 text-slate-400 flex items-center justify-center text-xs hover:bg-slate-600">+</button>
                         </div>
                         <span className="text-orange-400 text-xs font-bold">
                           R$ {((item.product.price * item.quantity) / 100).toFixed(2).replace('.', ',')}
                         </span>
                       </div>
                     </div>
-                    <button type="button" onClick={() => removeItem(item.product.id)} className="text-gray-600 hover:text-red-400 self-start">
+                    <button type="button" onClick={() => removeItem(item.product.id)} className="text-slate-600 hover:text-red-400 self-start">
                       <svg width={14} height={14} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
                     </button>
                   </div>
                 ))}
               </div>
 
-              <div className="border-t border-[#222] pt-4 space-y-2">
+              <div className="border-t border-white/5 pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Subtotal</span>
+                  <span className="text-slate-500">Subtotal</span>
                   <span>R$ {(total / 100).toFixed(2).replace('.', ',')}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Frete</span>
+                  <span className="text-slate-500">Frete</span>
                   <span className={shippingCost === 0 ? 'text-green-400' : ''}>
                     {deliveryMethod === 'retirada' ? 'Grátis (retirada)' : shipping ? shipping.priceFormatted : 'Informe CEP'}
                   </span>
                 </div>
-                <div className="flex justify-between font-bold text-lg pt-2 border-t border-[#222]">
+                <div className="flex justify-between font-bold text-lg pt-2 border-t border-white/5">
                   <span>Total</span>
                   <span className="text-orange-400">R$ {(grandTotal / 100).toFixed(2).replace('.', ',')}</span>
                 </div>
               </div>
 
               <button type="submit" disabled={loading}
-                className="w-full mt-6 bg-orange-500 text-black py-4 rounded-xl font-bold text-sm tracking-wider uppercase hover:shadow-[0_0_40px_rgba(245,166,35,0.3)] transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+                className="w-full mt-6 bg-orange-500 text-white py-4 rounded-xl font-bold text-sm tracking-wider uppercase hover:bg-orange-600 hover:shadow-[0_0_40px_rgba(245,166,35,0.3)] transition-all disabled:opacity-50 flex items-center justify-center gap-2 min-h-[48px]">
                 {loading ? (
                   <>
-                    <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full" style={{ animation: 'spin 1s linear infinite' }} />
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full" style={{ animation: 'spin 1s linear infinite' }} />
                     Processando...
                   </>
                 ) : (
@@ -282,7 +282,7 @@ export default function CheckoutPage() {
                   {checkoutError}
                 </div>
               )}
-              <p className="text-center text-gray-600 text-[0.65rem] mt-3">
+              <p className="text-center text-slate-500 text-[0.65rem] mt-3">
                 {paymentGateway === 'mercadopago'
                   ? 'Pagamento seguro via Mercado Pago. Aceita PIX, cartão e boleto.'
                   : 'Pagamento seguro via Stripe. Aceita cartão, boleto e PIX.'}

@@ -80,7 +80,12 @@ export default function CartDrawer() {
             items.map((item) => (
               <div key={item.product.id} className="flex gap-4 bg-[#1e293b] border border-white/5 rounded-xl p-3 group" style={{ animation: 'scaleIn 0.3s ease-out' }}>
                 <div className="w-20 h-20 rounded-lg overflow-hidden bg-[#0f172a] flex-shrink-0">
-                  <Image src={item.product.images[0]} alt={item.product.name} width={80} height={80} className="w-full h-full object-cover" unoptimized />
+                  {item.product.images[0]?.startsWith('data:') ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <Image src={item.product.images[0] || '/logo.png'} alt={item.product.name} width={80} height={80} className="w-full h-full object-cover" unoptimized />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="text-sm font-medium text-slate-200 line-clamp-2 leading-snug mb-1">{item.product.name}</h3>

@@ -29,6 +29,9 @@ export default function Header() {
               Peças Bambozzi
             </span>
           </div>
+          <span className="sm:hidden font-bold text-sm tracking-wide text-white">
+            C&C
+          </span>
         </Link>
 
         {/* Desktop Nav */}
@@ -42,7 +45,7 @@ export default function Header() {
             <Link
               key={link.label}
               href={link.href}
-              className="text-slate-400 text-sm font-medium hover:text-orange-400 transition-colors relative group"
+              className="text-slate-300 text-sm font-medium hover:text-orange-400 transition-colors relative group"
             >
               {link.label}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-500 rounded-full transition-all duration-300 group-hover:w-full" />
@@ -90,7 +93,7 @@ export default function Header() {
               key={link.label}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="text-slate-300 text-sm font-medium py-3 px-4 rounded-xl hover:bg-slate-800/50 hover:text-orange-400 transition-all"
+              className="text-slate-300 text-sm font-medium py-4 px-4 rounded-xl hover:bg-slate-800/50 hover:text-orange-400 transition-all"
             >
               {link.label}
             </Link>

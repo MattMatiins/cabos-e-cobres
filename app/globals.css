@@ -93,8 +93,8 @@ body::after {
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(249,115,22,0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25), 0 0 0 1px rgba(249,115,22,0.1);
 }
 
 .product-card:hover .product-img-wrapper img {
@@ -103,7 +103,7 @@ body::after {
 
 .product-img-wrapper {
   position: relative;
-  aspect-ratio: 1;
+  aspect-ratio: 4/3;
   overflow: hidden;
   background: #0f172a;
 }
@@ -167,6 +167,16 @@ body::after {
   .hero-diagonal {
     clip-path: polygon(0 0, 100% 0, 100% 93%, 0 100%);
   }
+}
+
+/* ============== SCROLLBAR HIDE ============== */
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 /* ============== SECTION DIVIDER ============== */

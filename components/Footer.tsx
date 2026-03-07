@@ -4,11 +4,11 @@ import { WHATSAPP_URL } from '@/lib/products';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#020617] border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+    <footer className="bg-[#020617] border-t border-white/5 pb-20 md:pb-0">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 pt-12 md:pt-16 pb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 mb-10 md:mb-12">
           {/* Brand */}
-          <div className="md:col-span-2">
+          <div className="col-span-2">
             <Link href="/" className="flex items-center gap-3 no-underline mb-4">
               <Image src="/logo.png" alt="Cabos e Cobres" width={36} height={36} className="w-9 h-9 rounded-lg object-cover" />
               <div>
@@ -20,7 +20,7 @@ export default function Footer() {
                 </span>
               </div>
             </Link>
-            <p className="text-slate-500 text-sm leading-relaxed max-w-sm mt-4">
+            <p className="text-slate-400 text-sm leading-relaxed max-w-sm mt-4">
               Distribuidora de peças e componentes elétricos para geradores, soldas e
               equipamentos industriais Bambozzi. Qualidade original com os melhores preços do Brasil.
             </p>
@@ -41,27 +41,27 @@ export default function Footer() {
 
           {/* Nav */}
           <div>
-            <h4 className="text-slate-300 text-[0.7rem] font-bold tracking-[0.15em] uppercase mb-5">
+            <h4 className="text-slate-300 text-[0.7rem] font-bold tracking-[0.15em] uppercase mb-4 md:mb-5">
               Navegação
             </h4>
             <div className="flex flex-col gap-3">
-              <Link href="/" className="text-slate-500 text-sm hover:text-orange-400 transition-colors">Início</Link>
-              <Link href="#produtos" className="text-slate-500 text-sm hover:text-orange-400 transition-colors">Catálogo</Link>
-              <Link href="#sobre" className="text-slate-500 text-sm hover:text-orange-400 transition-colors">Sobre</Link>
-              <Link href="#contato" className="text-slate-500 text-sm hover:text-orange-400 transition-colors">Contato</Link>
+              <Link href="/" className="text-slate-400 text-sm hover:text-orange-400 transition-colors">Início</Link>
+              <Link href="#produtos" className="text-slate-400 text-sm hover:text-orange-400 transition-colors">Catálogo</Link>
+              <Link href="#sobre" className="text-slate-400 text-sm hover:text-orange-400 transition-colors">Sobre</Link>
+              <Link href="#contato" className="text-slate-400 text-sm hover:text-orange-400 transition-colors">Contato</Link>
             </div>
           </div>
 
           {/* Info */}
           <div>
-            <h4 className="text-slate-300 text-[0.7rem] font-bold tracking-[0.15em] uppercase mb-5">
+            <h4 className="text-slate-300 text-[0.7rem] font-bold tracking-[0.15em] uppercase mb-4 md:mb-5">
               Informações
             </h4>
             <div className="flex flex-col gap-3">
-              <a href="#" className="text-slate-500 text-sm hover:text-orange-400 transition-colors">Política de Privacidade</a>
-              <a href="#" className="text-slate-500 text-sm hover:text-orange-400 transition-colors">Termos de Serviço</a>
-              <a href="#" className="text-slate-500 text-sm hover:text-orange-400 transition-colors">Política de Frete</a>
-              <a href="#" className="text-slate-500 text-sm hover:text-orange-400 transition-colors">Trocas e Devoluções</a>
+              <a href="#" className="text-slate-400 text-sm hover:text-orange-400 transition-colors">Privacidade</a>
+              <a href="#" className="text-slate-400 text-sm hover:text-orange-400 transition-colors">Termos de Serviço</a>
+              <a href="#" className="text-slate-400 text-sm hover:text-orange-400 transition-colors">Política de Frete</a>
+              <a href="#" className="text-slate-400 text-sm hover:text-orange-400 transition-colors">Trocas e Devoluções</a>
             </div>
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function Footer() {
           <p className="text-slate-600 text-xs">
             &copy; {new Date().getFullYear()} Cabos e Cobres. Todos os direitos reservados.
           </p>
-          <div className="flex gap-5">
+          <div className="hidden md:flex gap-5">
             <a href="#" className="text-slate-600 text-xs hover:text-slate-400 transition-colors">Termos</a>
             <a href="#" className="text-slate-600 text-xs hover:text-slate-400 transition-colors">Privacidade</a>
           </div>

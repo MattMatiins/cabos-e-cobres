@@ -10,8 +10,9 @@ export default function Home() {
   return (
     <>
       {/* Top bar */}
-      <div className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600 text-white text-center py-2.5 px-4 text-xs font-semibold tracking-wider">
-        Frete grátis para São Paulo &bull; Envio para todo Brasil &bull; Peças Originais Bambozzi
+      <div className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600 text-white text-center py-2.5 px-4 text-[0.7rem] sm:text-xs font-semibold tracking-wider">
+        <span className="hidden sm:inline">Frete grátis para São Paulo &bull; Envio para todo Brasil &bull; Peças Originais Bambozzi</span>
+        <span className="sm:hidden">Peças Originais Bambozzi &bull; Frete grátis SP</span>
       </div>
       <Header />
       <Hero />

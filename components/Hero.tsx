@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a]">
@@ -47,7 +49,7 @@ export default function Hero() {
             </h1>
 
             <p
-              className="text-lg text-slate-400 leading-relaxed max-w-lg mb-8 opacity-0"
+              className="text-base md:text-lg text-slate-300 leading-relaxed max-w-lg mb-8 opacity-0"
               style={{ animation: 'fadeUp 0.6s ease-out 0.2s forwards' }}
             >
               Peças e acessórios originais para geradores, soldas e equipamentos industriais.
@@ -60,7 +62,7 @@ export default function Hero() {
             >
               <a
                 href="#produtos"
-                className="inline-flex items-center gap-3 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-sm tracking-wider uppercase shadow-[0_4px_20px_rgba(249,115,22,0.3)] hover:shadow-[0_8px_30px_rgba(249,115,22,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+                className="w-full sm:w-auto text-center inline-flex items-center justify-center gap-3 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-sm tracking-wider uppercase shadow-[0_4px_20px_rgba(249,115,22,0.3)] hover:shadow-[0_8px_30px_rgba(249,115,22,0.4)] hover:-translate-y-0.5 transition-all duration-300 group min-h-[48px]"
               >
                 Ver Catálogo
                 <svg className="w-[18px] h-[18px] transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -80,7 +82,7 @@ export default function Hero() {
 
             {/* Trust badges */}
             <div
-              className="flex flex-wrap items-center gap-6 mt-10 opacity-0"
+              className="flex flex-wrap items-center gap-4 md:gap-6 mt-8 md:mt-10 opacity-0"
               style={{ animation: 'fadeUp 0.6s ease-out 0.5s forwards' }}
             >
               {[
@@ -100,35 +102,34 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right side - Stats/Visual */}
+          {/* Right side - Visual emphasis */}
           <div
-            className="hidden lg:block relative opacity-0"
+            className="hidden lg:flex items-center justify-center relative opacity-0"
             style={{ animation: 'fadeUp 0.6s ease-out 0.4s forwards' }}
           >
             <div className="relative">
-              {/* Stats cards */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-slate-800/50 backdrop-blur-sm border border-white/5 rounded-2xl p-6 text-center">
-                  <div className="text-3xl font-extrabold text-orange-400 mb-1">28+</div>
-                  <div className="text-xs text-slate-400 font-medium uppercase tracking-wider">Produtos</div>
-                </div>
-                <div className="bg-slate-800/50 backdrop-blur-sm border border-white/5 rounded-2xl p-6 text-center">
-                  <div className="text-3xl font-extrabold text-orange-400 mb-1">27</div>
-                  <div className="text-xs text-slate-400 font-medium uppercase tracking-wider">Estados</div>
-                </div>
-                <div className="bg-slate-800/50 backdrop-blur-sm border border-white/5 rounded-2xl p-6 text-center">
-                  <div className="text-3xl font-extrabold text-orange-400 mb-1">100%</div>
-                  <div className="text-xs text-slate-400 font-medium uppercase tracking-wider">Original</div>
-                </div>
-                <div className="bg-slate-800/50 backdrop-blur-sm border border-white/5 rounded-2xl p-6 text-center">
-                  <div className="text-3xl font-extrabold text-white mb-1">SP</div>
-                  <div className="text-xs text-slate-400 font-medium uppercase tracking-wider">Frete Grátis</div>
-                </div>
+              {/* Large brand container */}
+              <div className="w-64 h-64 rounded-3xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-white/5 flex items-center justify-center backdrop-blur-sm">
+                <Image
+                  src="/logo.png"
+                  alt="Cabos e Cobres"
+                  width={160}
+                  height={160}
+                  className="w-40 h-40 rounded-2xl object-cover"
+                />
               </div>
-
-              {/* Decorative element */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 border border-orange-500/10 rounded-2xl -z-10" />
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 border border-orange-500/5 rounded-3xl -z-10" />
+              {/* Floating accent - Original */}
+              <div className="absolute -top-6 -right-6 bg-orange-500/10 border border-orange-500/20 rounded-xl px-4 py-3 backdrop-blur-sm" style={{ animation: 'float 6s ease-in-out infinite' }}>
+                <span className="text-orange-400 font-bold text-lg">100%</span>
+                <span className="block text-slate-400 text-[0.65rem] font-medium uppercase tracking-wider">Original</span>
+              </div>
+              {/* Floating accent - Free shipping */}
+              <div className="absolute -bottom-4 -left-8 bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3 backdrop-blur-sm" style={{ animation: 'float 6s ease-in-out 3s infinite' }}>
+                <span className="text-green-400 font-bold text-lg">SP</span>
+                <span className="block text-slate-400 text-[0.65rem] font-medium uppercase tracking-wider">Frete Grátis</span>
+              </div>
+              {/* Decorative ring */}
+              <div className="absolute -inset-8 border border-orange-500/5 rounded-[2rem] -z-10" />
             </div>
           </div>
         </div>
