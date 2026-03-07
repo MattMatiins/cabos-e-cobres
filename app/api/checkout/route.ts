@@ -76,26 +76,32 @@ async function createMercadoPagoCheckout(
     .map((item) => {
       const product = getProducts().find((p) => p.id === item.productId);
       if (!product) return null;
-      return {
-        id: product.id,
+      const httpImage = product.images.find((img: string) => img.startsWith('http'));
+      const mpItem: any = {
         title: product.name,
-        description: `Código: ${product.code}`,
-        picture_url: (product.images.find((img: string) => img.startsWith('http'))) || '',
+        description: product.code ? `Código: ${product.code}` : product.name,
         quantity: item.quantity,
         currency_id: 'BRL',
-        unit_price: product.price / 100, // MP uses reais, not centavos
+        unit_price: Math.round(product.price) / 100, // MP uses reais, max 2 decimals
       };
+      // Only include picture_url if we have a valid HTTP URL (MP rejects empty strings)
+      if (httpImage) {
+        mpItem.picture_url = httpImage;
+      }
+      return mpItem;
     })
     .filter(Boolean);
 
   if (mpItems.length === 0) throw new Error('Nenhum produto válido');
 
+  // Validate unit_price > 0
+  const invalidItem = mpItems.find((item: any) => !item.unit_price || item.unit_price <= 0);
+  if (invalidItem) {
+    throw new Error(`Produto "${invalidItem.title}" tem preço inválido`);
+  }
+
   const preference: any = {
     items: mpItems,
-    payer: {
-      name: customerName,
-      email: customerEmail,
-    },
     external_reference: orderId,
     back_urls: {
       success: `${origin}/success?order_id=${orderId}`,
@@ -103,13 +109,28 @@ async function createMercadoPagoCheckout(
       pending: `${origin}/success?order_id=${orderId}&pending=true`,
     },
     auto_return: 'approved',
-    statement_descriptor: 'CABOS E COBRES',
+    statement_descriptor: 'CABOSECOBRES',
   };
+
+  // Add payer info (name always, email only if provided)
+  if (customerName || customerEmail) {
+    preference.payer = {} as any;
+    if (customerName) preference.payer.name = customerName;
+    if (customerEmail) preference.payer.email = customerEmail;
+  }
 
   // Only add notification_url for production (MP rejects localhost)
   if (!origin.includes('localhost') && !origin.includes('127.0.0.1')) {
     preference.notification_url = `${origin}/api/webhooks/mercadopago`;
   }
+
+  console.log('[MP Checkout] Creating preference:', JSON.stringify({
+    items: mpItems.length,
+    orderId,
+    origin,
+    hasPayerEmail: !!customerEmail,
+    tokenType: accessToken.startsWith('TEST-') ? 'TEST' : accessToken.startsWith('APP_USR') ? 'APP_USR' : 'OTHER',
+  }));
 
   const res = await fetch('https://api.mercadopago.com/checkout/preferences', {
     method: 'POST',
@@ -122,7 +143,7 @@ async function createMercadoPagoCheckout(
 
   if (!res.ok) {
     const errorText = await res.text().catch(() => '');
-    console.error('Mercado Pago error:', res.status, errorText);
+    console.error('[MP Checkout] API Error:', res.status, errorText);
     let errorMsg = `Erro Mercado Pago (${res.status})`;
     try {
       const errorData = JSON.parse(errorText);
@@ -135,6 +156,18 @@ async function createMercadoPagoCheckout(
   const data = await res.json();
   // Use sandbox URL for test tokens, production for live tokens
   const checkoutUrl = accessToken.startsWith('TEST-') ? data.sandbox_init_point : data.init_point;
+
+  console.log('[MP Checkout] Preference created:', {
+    preferenceId: data.id,
+    checkoutUrl: checkoutUrl ? 'OK' : 'MISSING',
+    initPoint: data.init_point ? 'present' : 'absent',
+    sandboxInitPoint: data.sandbox_init_point ? 'present' : 'absent',
+  });
+
+  if (!checkoutUrl) {
+    throw new Error('Mercado Pago não retornou URL de checkout. Verifique se o token está ativo.');
+  }
+
   return { url: checkoutUrl, preferenceId: data.id };
 }
 

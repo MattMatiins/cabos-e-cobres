@@ -13,6 +13,7 @@ export default function CheckoutPage() {
   const [shipping, setShipping] = useState<any>(null);
   const [shippingLoading, setShippingLoading] = useState(false);
   const [paymentGateway, setPaymentGateway] = useState<string>('mercadopago');
+  const [checkoutError, setCheckoutError] = useState<string>('');
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -58,6 +59,7 @@ export default function CheckoutPage() {
     if (items.length === 0) return;
 
     setLoading(true);
+    setCheckoutError('');
     try {
       const res = await fetch('/api/checkout', {
         method: 'POST',
@@ -77,10 +79,10 @@ export default function CheckoutPage() {
         clearCart();
         window.location.href = data.url;
       } else {
-        alert(data.error || 'Erro ao processar pagamento. Tente novamente.');
+        setCheckoutError(data.error || 'Erro ao processar pagamento. Tente novamente.');
       }
     } catch {
-      alert('Erro de conexão. Verifique sua internet e tente novamente.');
+      setCheckoutError('Erro de conexão. Verifique sua internet e tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -212,7 +214,12 @@ export default function CheckoutPage() {
                 {items.map((item) => (
                   <div key={item.product.id} className="flex gap-3">
                     <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#0e0e0e] flex-shrink-0">
-                      <Image src={item.product.images[0]} alt={item.product.name} width={56} height={56} className="w-full h-full object-cover" unoptimized />
+                      {item.product.images[0]?.startsWith('data:') ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <Image src={item.product.images[0] || '/placeholder.png'} alt={item.product.name} width={56} height={56} className="w-full h-full object-cover" unoptimized />
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-gray-300 line-clamp-2">{item.product.name}</p>
@@ -267,6 +274,14 @@ export default function CheckoutPage() {
                   </>
                 )}
               </button>
+              {checkoutError && (
+                <div className="mt-3 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs text-center">
+                  <svg width={14} height={14} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" className="inline mr-1">
+                    <circle cx={12} cy={12} r={10} /><path d="M12 8v4M12 16h.01" />
+                  </svg>
+                  {checkoutError}
+                </div>
+              )}
               <p className="text-center text-gray-600 text-[0.65rem] mt-3">
                 {paymentGateway === 'mercadopago'
                   ? 'Pagamento seguro via Mercado Pago. Aceita PIX, cartão e boleto.'
