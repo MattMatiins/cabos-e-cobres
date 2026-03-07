@@ -21,15 +21,46 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem('admin_token');
-    if (saved) setToken(saved);
+    if (saved) {
+      // Validate saved token against server
+      fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: saved }),
+      })
+        .then((res) => {
+          if (res.ok) {
+            setToken(saved);
+          } else {
+            localStorage.removeItem('admin_token');
+            setError('Sessão expirada. Faça login novamente.');
+          }
+        })
+        .catch(() => {
+          setToken(saved); // Offline? Try with saved token
+        });
+    }
   }, []);
 
-  function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     if (!input.trim()) return;
-    localStorage.setItem('admin_token', input);
-    setToken(input);
     setError('');
+    try {
+      const res = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: input }),
+      });
+      if (res.ok) {
+        localStorage.setItem('admin_token', input);
+        setToken(input);
+      } else {
+        setError('Senha incorreta. Tente novamente.');
+      }
+    } catch {
+      setError('Erro de conexão. Tente novamente.');
+    }
   }
 
   function handleLogout() {
