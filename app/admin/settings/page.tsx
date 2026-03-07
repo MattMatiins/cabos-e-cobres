@@ -20,36 +20,28 @@ export default function AdminSettings() {
         setError('');
       } else if (res.status === 401) {
         setError('Senha de admin incorreta. Faça login novamente.');
-        setSettings({
-          stripeSecretKey: '',
-          stripePublishableKey: '',
-          smsApiKey: '',
-          smsFromNumber: '',
-          messages: { ...DEFAULT_MESSAGES },
-          shippingRates: [...SHIPPING_STATES],
-        });
+        setSettings(getDefaults());
       } else {
         setError('Erro ao carregar configurações.');
-        setSettings({
-          stripeSecretKey: '',
-          stripePublishableKey: '',
-          smsApiKey: '',
-          smsFromNumber: '',
-          messages: { ...DEFAULT_MESSAGES },
-          shippingRates: [...SHIPPING_STATES],
-        });
+        setSettings(getDefaults());
       }
     } catch {
       setError('Erro de conexão. Usando valores padrão.');
-      setSettings({
-        stripeSecretKey: '',
-        stripePublishableKey: '',
-        smsApiKey: '',
-        smsFromNumber: '',
-        messages: { ...DEFAULT_MESSAGES },
-        shippingRates: [...SHIPPING_STATES],
-      });
+      setSettings(getDefaults());
     }
+  }
+
+  function getDefaults() {
+    return {
+      paymentGateway: 'mercadopago',
+      stripeSecretKey: '',
+      stripePublishableKey: '',
+      mercadoPagoAccessToken: '',
+      smsApiKey: '',
+      smsFromNumber: '',
+      messages: { ...DEFAULT_MESSAGES },
+      shippingRates: [...SHIPPING_STATES],
+    };
   }
 
   useEffect(() => {
@@ -91,7 +83,7 @@ export default function AdminSettings() {
     <div>
       <div className="mb-8">
         <h1 className="font-extrabold text-2xl text-white mb-1">Configurações</h1>
-        <p className="text-gray-500 text-sm">Stripe, SMS, frete e mensagens personalizadas</p>
+        <p className="text-gray-500 text-sm">Pagamento, WhatsApp, frete e mensagens personalizadas</p>
       </div>
 
       {error && (
@@ -101,40 +93,126 @@ export default function AdminSettings() {
       )}
 
       <form onSubmit={handleSave} className="max-w-2xl space-y-8">
-        {/* Stripe */}
+        {/* ── Payment Gateway Selector ── */}
         <div className="bg-[#111] border border-[#222] rounded-2xl p-6">
           <h2 className="font-bold text-lg mb-1 flex items-center gap-3">
             <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
               <rect x={1} y={4} width={22} height={16} rx={2} ry={2} /><line x1={1} y1={10} x2={23} y2={10} />
             </svg>
-            Stripe
+            Gateway de Pagamento
           </h2>
-          <p className="text-gray-500 text-xs mb-5">Configure suas chaves do Stripe para processar pagamentos</p>
-          <div className="space-y-3">
-            <div>
-              <label className="block text-gray-400 text-xs mb-1.5">Chave Secreta (Secret Key)</label>
-              <input
-                type="text"
-                value={settings.stripeSecretKey || ''}
-                onChange={(e) => setSettings({ ...settings, stripeSecretKey: e.target.value })}
-                placeholder="sk_live_..."
-                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 font-mono"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-400 text-xs mb-1.5">Chave Pública (Publishable Key)</label>
-              <input
-                type="text"
-                value={settings.stripePublishableKey || ''}
-                onChange={(e) => setSettings({ ...settings, stripePublishableKey: e.target.value })}
-                placeholder="pk_live_..."
-                className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 font-mono"
-              />
-            </div>
+          <p className="text-gray-500 text-xs mb-5">Escolha o provedor de pagamento ativo para sua loja</p>
+
+          {/* Toggle buttons */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            <button
+              type="button"
+              onClick={() => setSettings({ ...settings, paymentGateway: 'mercadopago' })}
+              className={`p-4 rounded-xl border-2 text-left transition-all ${
+                settings.paymentGateway === 'mercadopago'
+                  ? 'border-orange-500 bg-orange-500/5'
+                  : 'border-[#222] hover:border-[#333]'
+              }`}
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm ${
+                  settings.paymentGateway === 'mercadopago' ? 'bg-[#009ee3] text-white' : 'bg-[#222] text-gray-500'
+                }`}>
+                  MP
+                </div>
+                <div>
+                  <p className={`font-bold text-sm ${settings.paymentGateway === 'mercadopago' ? 'text-white' : 'text-gray-400'}`}>
+                    Mercado Pago
+                  </p>
+                  <p className="text-gray-600 text-[10px]">PIX, Cartão, Boleto</p>
+                </div>
+              </div>
+              {settings.paymentGateway === 'mercadopago' && (
+                <div className="flex items-center gap-1 text-orange-400 text-xs font-semibold">
+                  <svg width={12} height={12} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" /></svg>
+                  Ativo
+                </div>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSettings({ ...settings, paymentGateway: 'stripe' })}
+              className={`p-4 rounded-xl border-2 text-left transition-all ${
+                settings.paymentGateway === 'stripe'
+                  ? 'border-orange-500 bg-orange-500/5'
+                  : 'border-[#222] hover:border-[#333]'
+              }`}
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm ${
+                  settings.paymentGateway === 'stripe' ? 'bg-[#635bff] text-white' : 'bg-[#222] text-gray-500'
+                }`}>
+                  S
+                </div>
+                <div>
+                  <p className={`font-bold text-sm ${settings.paymentGateway === 'stripe' ? 'text-white' : 'text-gray-400'}`}>
+                    Stripe
+                  </p>
+                  <p className="text-gray-600 text-[10px]">Cartão, Boleto</p>
+                </div>
+              </div>
+              {settings.paymentGateway === 'stripe' && (
+                <div className="flex items-center gap-1 text-orange-400 text-xs font-semibold">
+                  <svg width={12} height={12} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" /></svg>
+                  Ativo
+                </div>
+              )}
+            </button>
           </div>
+
+          {/* Mercado Pago Fields */}
+          {settings.paymentGateway === 'mercadopago' && (
+            <div className="space-y-3 border-t border-[#222] pt-5">
+              <div>
+                <label className="block text-gray-400 text-xs mb-1.5">Access Token (Mercado Pago)</label>
+                <input
+                  type="text"
+                  value={settings.mercadoPagoAccessToken || ''}
+                  onChange={(e) => setSettings({ ...settings, mercadoPagoAccessToken: e.target.value })}
+                  placeholder="APP_USR-... ou TEST-..."
+                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 font-mono"
+                />
+                <p className="text-gray-600 text-[10px] mt-1.5">
+                  Obtenha em: Mercado Pago → Seu negócio → Configurações → Credenciais
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Stripe Fields */}
+          {settings.paymentGateway === 'stripe' && (
+            <div className="space-y-3 border-t border-[#222] pt-5">
+              <div>
+                <label className="block text-gray-400 text-xs mb-1.5">Chave Secreta (Secret Key)</label>
+                <input
+                  type="text"
+                  value={settings.stripeSecretKey || ''}
+                  onChange={(e) => setSettings({ ...settings, stripeSecretKey: e.target.value })}
+                  placeholder="sk_live_..."
+                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 font-mono"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 text-xs mb-1.5">Chave Pública (Publishable Key)</label>
+                <input
+                  type="text"
+                  value={settings.stripePublishableKey || ''}
+                  onChange={(e) => setSettings({ ...settings, stripePublishableKey: e.target.value })}
+                  placeholder="pk_live_..."
+                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 font-mono"
+                />
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Shipping */}
+        {/* ── Shipping ── */}
         <div className="bg-[#111] border border-[#222] rounded-2xl p-6">
           <h2 className="font-bold text-lg mb-1 flex items-center gap-3">
             <svg width={20} height={20} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
@@ -165,40 +243,48 @@ export default function AdminSettings() {
           </div>
         </div>
 
-        {/* SMS */}
+        {/* ── WhatsApp Notifications ── */}
         <div className="bg-[#111] border border-[#222] rounded-2xl p-6">
           <h2 className="font-bold text-lg mb-1 flex items-center gap-3">
-            <svg width={20} height={20} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
-              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+            <svg width={20} height={20} fill="currentColor" viewBox="0 0 24 24" className="text-green-500">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
             </svg>
-            SMS (Twilio)
+            WhatsApp / Notificações
           </h2>
-          <p className="text-gray-500 text-xs mb-5">Configure o envio de SMS para notificações de pedidos</p>
+          <p className="text-gray-500 text-xs mb-5">
+            Configure notificações automáticas via WhatsApp (CallMeBot) ou manual
+          </p>
           <div className="space-y-3">
             <div>
-              <label className="block text-gray-400 text-xs mb-1.5">API Key (AccountSID:AuthToken)</label>
+              <label className="block text-gray-400 text-xs mb-1.5">API Key do CallMeBot (opcional)</label>
               <input
                 type="text"
                 value={settings.smsApiKey || ''}
                 onChange={(e) => setSettings({ ...settings, smsApiKey: e.target.value })}
-                placeholder="ACxxxxxxx:xxxxxxxx"
+                placeholder="callmebot:SUA_API_KEY"
                 className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 font-mono"
               />
+              <p className="text-gray-600 text-[10px] mt-1.5">
+                Gratuito! Cadastre em: https://www.callmebot.com/blog/free-api-whatsapp-messages/
+              </p>
             </div>
             <div>
-              <label className="block text-gray-400 text-xs mb-1.5">Número de Envio</label>
+              <label className="block text-gray-400 text-xs mb-1.5">Número WhatsApp (com código do país)</label>
               <input
                 type="text"
                 value={settings.smsFromNumber || ''}
                 onChange={(e) => setSettings({ ...settings, smsFromNumber: e.target.value })}
-                placeholder="+5517999999999"
+                placeholder="5517999999999"
                 className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50"
               />
+              <p className="text-gray-600 text-[10px] mt-1.5">
+                Sem API? Um link WhatsApp será gerado para envio manual na tela de pedidos.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Messages */}
+        {/* ── Messages ── */}
         <div className="bg-[#111] border border-[#222] rounded-2xl p-6">
           <h2 className="font-bold text-lg mb-1 flex items-center gap-3">
             <svg width={20} height={20} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
@@ -207,7 +293,7 @@ export default function AdminSettings() {
             Mensagens Personalizadas
           </h2>
           <p className="text-gray-500 text-xs mb-5">
-            Personalize as mensagens SMS. Use: {'{nome}'}, {'{id}'}, {'{rastreio}'}, {'{total}'}
+            Personalize as mensagens WhatsApp. Use: {'{nome}'}, {'{id}'}, {'{rastreio}'}, {'{total}'}
           </p>
           <div className="space-y-4">
             {[

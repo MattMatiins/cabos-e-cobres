@@ -13,6 +13,10 @@ export async function POST(req: NextRequest) {
 
     const origin = req.headers.get('origin') || 'http://localhost:3000';
 
+    if (!stripe) {
+      return NextResponse.json({ error: 'Stripe não está configurado' }, { status: 500 });
+    }
+
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       payment_method_types: ['card', 'boleto'],

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
@@ -12,6 +12,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [shipping, setShipping] = useState<any>(null);
   const [shippingLoading, setShippingLoading] = useState(false);
+  const [paymentGateway, setPaymentGateway] = useState<string>('mercadopago');
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -19,6 +20,13 @@ export default function CheckoutPage() {
     address: '',
     cep: '',
   });
+
+  useEffect(() => {
+    fetch('/api/payment-gateway')
+      .then((r) => r.json())
+      .then((d) => { if (d.gateway) setPaymentGateway(d.gateway); })
+      .catch(() => {});
+  }, []);
 
   async function calcShipping(cep: string) {
     if (cep.replace(/\D/g, '').length < 5) return;
@@ -255,11 +263,15 @@ export default function CheckoutPage() {
                     <svg width={18} height={18} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                       <rect x={1} y={4} width={22} height={16} rx={2} ry={2} /><line x1={1} y1={10} x2={23} y2={10} />
                     </svg>
-                    Pagar com Stripe
+                    {paymentGateway === 'mercadopago' ? 'Pagar com Mercado Pago' : 'Pagar com Stripe'}
                   </>
                 )}
               </button>
-              <p className="text-center text-gray-600 text-[0.65rem] mt-3">Pagamento seguro via Stripe. Aceita cartão, boleto e PIX.</p>
+              <p className="text-center text-gray-600 text-[0.65rem] mt-3">
+                {paymentGateway === 'mercadopago'
+                  ? 'Pagamento seguro via Mercado Pago. Aceita PIX, cartão e boleto.'
+                  : 'Pagamento seguro via Stripe. Aceita cartão, boleto e PIX.'}
+              </p>
             </div>
           </div>
         </form>

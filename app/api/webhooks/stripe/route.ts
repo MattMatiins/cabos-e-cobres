@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   try {
     let event;
 
-    if (endpointSecret) {
+    if (endpointSecret && stripe) {
       event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
     } else {
       // For development without webhook secret

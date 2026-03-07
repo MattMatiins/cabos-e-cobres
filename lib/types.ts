@@ -42,9 +42,13 @@ export interface ShippingRate {
   cepRangeEnd: string;
 }
 
+export type PaymentGateway = 'mercadopago' | 'stripe';
+
 export interface StoreSettings {
+  paymentGateway: PaymentGateway;
   stripeSecretKey: string;
   stripePublishableKey: string;
+  mercadoPagoAccessToken: string;
   smsApiKey: string;
   smsFromNumber: string;
   shippingRates: ShippingRate[];
