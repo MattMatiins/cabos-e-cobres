@@ -18,11 +18,16 @@ export const metadata: Metadata = {
     'peças para gerador',
     'componentes elétricos',
   ],
+  icons: {
+    icon: '/favicon.png',
+    apple: '/logo.png',
+  },
   openGraph: {
     title: 'Cabos e Cobres – Peças e Componentes Elétricos',
     description: 'Peças originais Bambozzi com os melhores preços do Brasil.',
     type: 'website',
     locale: 'pt_BR',
+    images: ['/logo.png'],
   },
 };
 

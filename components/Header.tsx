@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCart } from '@/lib/cart-context';
 
 export default function Header() {
@@ -12,9 +13,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-[#0a0a0a]/85 backdrop-blur-xl border-b border-[#222]">
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-[72px]">
         <Link href="/" className="flex items-center gap-3 no-underline">
-          <div className="w-10 h-10 bg-brand rounded-lg flex items-center justify-center font-display text-black text-sm shadow-[0_0_20px_rgba(245,166,35,0.3)]">
-            CC
-          </div>
+          <Image src="/logo.png" alt="Cabos e Cobres" width={40} height={40} className="w-10 h-10 rounded-lg object-cover shadow-[0_0_20px_rgba(245,166,35,0.3)]" />
           <span className="font-display text-[1.1rem] tracking-wider uppercase text-white">
             Cabos <span className="text-brand">&amp;</span> Cobres
           </span>

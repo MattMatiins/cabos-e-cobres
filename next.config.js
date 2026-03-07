@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: 'cabosecobres.myshopify.com',
         pathname: '/cdn/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.shopify.com',
+        pathname: '/s/files/**',
+      },
     ],
   },
 };

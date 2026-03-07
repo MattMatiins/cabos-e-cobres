@@ -1,4 +1,4 @@
-import { Order, Visitor, StoreSettings, DEFAULT_MESSAGES } from './types';
+import { Order, Visitor, StoreSettings, DEFAULT_MESSAGES, SHIPPING_STATES } from './types';
 import { Product, PRODUCTS } from './products';
 
 // In-memory store (persists across hot reloads in dev via globalThis)
@@ -24,6 +24,7 @@ function getStore(): Store {
         stripePublishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
         smsApiKey: process.env.SMS_API_KEY || '',
         smsFromNumber: process.env.SMS_FROM_NUMBER || '',
+        shippingRates: [...SHIPPING_STATES],
         messages: { ...DEFAULT_MESSAGES },
       },
     };
@@ -89,10 +90,19 @@ export function updateOrder(id: string, data: Partial<Order>): Order | null {
 // Visitors
 export function trackVisitor(visitor: Visitor): void {
   const store = getStore();
-  store.visitors.push(visitor);
-  // Keep last 1000 visitors
-  if (store.visitors.length > 1000) {
-    store.visitors = store.visitors.slice(-1000);
+  // Update existing session or add new one
+  const existingIdx = store.visitors.findIndex((v) => v.id === visitor.id);
+  if (existingIdx !== -1) {
+    // Same session: just update timestamp and page (heartbeat)
+    store.visitors[existingIdx].timestamp = visitor.timestamp;
+    store.visitors[existingIdx].page = visitor.page;
+  } else {
+    // New unique session
+    store.visitors.push(visitor);
+  }
+  // Keep last 500 unique sessions
+  if (store.visitors.length > 500) {
+    store.visitors = store.visitors.slice(-500);
   }
 }
 
@@ -104,16 +114,17 @@ export function getRecentVisitors(minutes = 5): Visitor[] {
 export function getVisitorStats() {
   const store = getStore();
   const now = Date.now();
-  const fiveMin = store.visitors.filter(
+  // Each entry is a unique session, so count directly
+  const realtime = store.visitors.filter(
     (v) => new Date(v.timestamp).getTime() > now - 5 * 60 * 1000
   ).length;
-  const oneHour = store.visitors.filter(
+  const lastHour = store.visitors.filter(
     (v) => new Date(v.timestamp).getTime() > now - 60 * 60 * 1000
   ).length;
   const today = store.visitors.filter(
     (v) => new Date(v.timestamp).toDateString() === new Date().toDateString()
   ).length;
-  return { realtime: fiveMin, lastHour: oneHour, today };
+  return { realtime, lastHour, today };
 }
 
 // Settings
