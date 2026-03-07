@@ -31,16 +31,26 @@ export default function ProductCard({ product, index }: { product: Product; inde
       <div className="product-card bg-[#1e293b] border border-white/5 rounded-2xl overflow-hidden group">
         {/* Image */}
         <div className="product-img-wrapper relative bg-[#0f172a]">
-          {!imgError ? (
-            <Image
-              src={product.images[0]}
-              alt={product.name}
-              width={600}
-              height={600}
-              className="w-full h-full object-cover"
-              onError={() => setImgError(true)}
-              unoptimized
-            />
+          {!imgError && product.images?.[0] ? (
+            product.images[0].startsWith('data:') ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={product.images[0]}
+                alt={product.name}
+                className="w-full h-full object-cover"
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <Image
+                src={product.images[0]}
+                alt={product.name}
+                width={600}
+                height={600}
+                className="w-full h-full object-cover"
+                onError={() => setImgError(true)}
+                unoptimized
+              />
+            )
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-slate-800 text-slate-600">
               <svg width={48} height={48} fill="none" stroke="currentColor" strokeWidth={1} viewBox="0 0 24 24">

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
-import { PRODUCTS } from '@/lib/products';
+import { getProducts } from '@/lib/store';
 
 export async function POST(req: NextRequest) {
   try {
     const { productId, quantity = 1 } = await req.json();
 
-    const product = PRODUCTS.find((p) => p.id === productId);
+    const product = getProducts().find((p) => p.id === productId);
     if (!product) {
       return NextResponse.json({ error: 'Produto não encontrado' }, { status: 404 });
     }

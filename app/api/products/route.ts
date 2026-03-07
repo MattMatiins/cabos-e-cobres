@@ -1,0 +1,10 @@
+import { NextResponse } from 'next/server';
+import { getProducts } from '@/lib/store';
+
+// Public endpoint — no auth required
+export async function GET() {
+  const products = getProducts();
+  return NextResponse.json(products);
+}
+
+export const dynamic = 'force-dynamic';

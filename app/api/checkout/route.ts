@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
-import { PRODUCTS } from '@/lib/products';
+import { getProducts } from '@/lib/store';
 import { createOrder, getSettings } from '@/lib/store';
 import type { DeliveryMethod, Order } from '@/lib/types';
 
@@ -21,7 +21,7 @@ async function createStripeCheckout(
 
   const lineItems = items
     .map((item) => {
-      const product = PRODUCTS.find((p) => p.id === item.productId);
+      const product = getProducts().find((p) => p.id === item.productId);
       if (!product) return null;
       return {
         price_data: {
@@ -29,7 +29,7 @@ async function createStripeCheckout(
           product_data: {
             name: product.name,
             description: `Código: ${product.code}`,
-            images: product.images.slice(0, 1),
+            images: product.images.filter((img: string) => img.startsWith('http')).slice(0, 1),
           },
           unit_amount: product.price,
         },
@@ -75,13 +75,13 @@ async function createMercadoPagoCheckout(
 ) {
   const mpItems = items
     .map((item) => {
-      const product = PRODUCTS.find((p) => p.id === item.productId);
+      const product = getProducts().find((p) => p.id === item.productId);
       if (!product) return null;
       return {
         id: product.id,
         title: product.name,
         description: `Código: ${product.code}`,
-        picture_url: product.images[0] || '',
+        picture_url: (product.images.find((img: string) => img.startsWith('http'))) || '',
         quantity: item.quantity,
         currency_id: 'BRL',
         unit_price: product.price / 100, // MP uses reais, not centavos
@@ -159,7 +159,7 @@ export async function POST(req: NextRequest) {
 
     // Calculate total
     const total = items.reduce((sum, item) => {
-      const product = PRODUCTS.find((p) => p.id === item.productId);
+      const product = getProducts().find((p) => p.id === item.productId);
       return sum + (product ? product.price * item.quantity : 0);
     }, 0);
 
@@ -168,7 +168,7 @@ export async function POST(req: NextRequest) {
       id: orderId,
       items: items
         .map((item) => {
-          const product = PRODUCTS.find((p) => p.id === item.productId);
+          const product = getProducts().find((p) => p.id === item.productId);
           if (!product) return null;
           return {
             productId: product.id,

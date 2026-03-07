@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { Product, PRODUCTS } from './products';
+import { Product } from './products';
 
 export interface CartItem {
   product: Product;
@@ -29,19 +29,37 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem('cart');
-    if (saved) {
-      try {
-        const parsed: { productId: string; quantity: number }[] = JSON.parse(saved);
-        const restored = parsed
-          .map((item) => {
-            const product = PRODUCTS.find((p) => p.id === item.productId);
-            return product ? { product, quantity: item.quantity } : null;
-          })
-          .filter(Boolean) as CartItem[];
-        setItems(restored);
-      } catch {}
+    if (!saved) {
+      setHydrated(true);
+      return;
     }
-    setHydrated(true);
+
+    try {
+      const parsed: { productId: string; quantity: number }[] = JSON.parse(saved);
+      if (!parsed.length) {
+        setHydrated(true);
+        return;
+      }
+
+      // Fetch products from API to restore cart with up-to-date data
+      fetch('/api/products')
+        .then((r) => r.json())
+        .then((allProducts: Product[]) => {
+          const restored = parsed
+            .map((item) => {
+              const product = allProducts.find((p: Product) => p.id === item.productId);
+              return product ? { product, quantity: item.quantity } : null;
+            })
+            .filter(Boolean) as CartItem[];
+          setItems(restored);
+          setHydrated(true);
+        })
+        .catch(() => {
+          setHydrated(true);
+        });
+    } catch {
+      setHydrated(true);
+    }
   }, []);
 
   useEffect(() => {

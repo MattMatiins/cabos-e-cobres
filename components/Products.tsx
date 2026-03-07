@@ -1,20 +1,32 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { PRODUCTS } from '@/lib/products';
+import { useState, useEffect, useMemo } from 'react';
+import type { Product } from '@/lib/products';
 import ProductCard from './ProductCard';
 
 export default function Products() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('Todos');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const categories = useMemo(() => {
-    const cats = Array.from(new Set(PRODUCTS.map((p) => p.category)));
-    return ['Todos', ...cats];
+  useEffect(() => {
+    fetch('/api/products')
+      .then((r) => r.json())
+      .then((data) => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
+  const categories = useMemo(() => {
+    const cats = Array.from(new Set(products.map((p) => p.category)));
+    return ['Todos', ...cats];
+  }, [products]);
+
   const filteredProducts = useMemo(() => {
-    let result = PRODUCTS;
+    let result = products;
 
     if (activeCategory !== 'Todos') {
       result = result.filter((p) => p.category === activeCategory);
@@ -31,7 +43,7 @@ export default function Products() {
     }
 
     return result;
-  }, [activeCategory, searchQuery]);
+  }, [products, activeCategory, searchQuery]);
 
   return (
     <section className="bg-[#0f172a] py-20" id="produtos">
@@ -84,18 +96,36 @@ export default function Products() {
         {/* Results count */}
         <div className="flex items-center justify-between mb-6">
           <p className="text-slate-500 text-sm">
-            {filteredProducts.length} {filteredProducts.length === 1 ? 'produto encontrado' : 'produtos encontrados'}
+            {loading ? 'Carregando...' : `${filteredProducts.length} ${filteredProducts.length === 1 ? 'produto encontrado' : 'produtos encontrados'}`}
           </p>
         </div>
 
-        {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {filteredProducts.map((product, i) => (
-            <ProductCard key={product.id} product={product} index={i} />
-          ))}
-        </div>
+        {/* Loading skeleton */}
+        {loading && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="bg-[#1e293b] border border-white/5 rounded-2xl overflow-hidden">
+                <div className="aspect-square bg-slate-800/50" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
+                <div className="p-5 space-y-3">
+                  <div className="h-3 bg-slate-800/50 rounded w-1/3" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
+                  <div className="h-4 bg-slate-800/50 rounded w-2/3" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
+                  <div className="h-6 bg-slate-800/50 rounded w-1/2" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
-        {filteredProducts.length === 0 && (
+        {/* Product Grid */}
+        {!loading && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {filteredProducts.map((product, i) => (
+              <ProductCard key={product.id} product={product} index={i} />
+            ))}
+          </div>
+        )}
+
+        {!loading && filteredProducts.length === 0 && (
           <div className="text-center py-16">
             <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" className="text-slate-500">
