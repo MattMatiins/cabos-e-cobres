@@ -4,7 +4,7 @@ import { getSettings } from './store';
 function formatMessage(template: string, order: Order): string {
   return template
     .replace(/{nome}/g, order.customerName)
-    .replace(/{id}/g, order.id.slice(-6).toUpperCase())
+    .replace(/{id}/g, order.trackingId || order.id.slice(-6).toUpperCase())
     .replace(/{rastreio}/g, order.trackingCode || 'N/A')
     .replace(/{total}/g, `R$ ${(order.total / 100).toFixed(2).replace('.', ',')}`)
     .replace(/{telefone}/g, order.customerPhone);
@@ -40,18 +40,23 @@ export async function sendOrderNotification(order: Order, newStatus: OrderStatus
   const message = formatMessage(template, order);
 
   // Try CallMeBot WhatsApp API (free) if configured
+  // CallMeBot sends to the REGISTERED number (admin/store), not customer
   if (settings.smsApiKey && settings.smsApiKey.startsWith('callmebot:')) {
     try {
       const apiKey = settings.smsApiKey.replace('callmebot:', '');
-      let phone = order.customerPhone.replace(/\D/g, '');
-      if (phone.startsWith('0')) phone = phone.slice(1);
-      if (!phone.startsWith('55')) phone = '55' + phone;
+      // Use smsFromNumber (admin's registered WhatsApp) as recipient
+      let adminPhone = (settings.smsFromNumber || '').replace(/\D/g, '');
+      if (adminPhone.startsWith('0')) adminPhone = adminPhone.slice(1);
+      if (!adminPhone.startsWith('55')) adminPhone = '55' + adminPhone;
 
-      const url = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(message)}&apikey=${apiKey}`;
+      // Include customer info in message for admin context
+      const adminMessage = `📦 Pedido ${order.trackingId || order.id.slice(-6)}\n👤 ${order.customerName}\n📱 ${order.customerPhone}\n\n${message}`;
+
+      const url = `https://api.callmebot.com/whatsapp.php?phone=${adminPhone}&text=${encodeURIComponent(adminMessage)}&apikey=${apiKey}`;
       const response = await fetch(url);
 
       if (response.ok) {
-        console.log(`[WhatsApp] Enviado para ${order.customerPhone}: ${message}`);
+        console.log(`[WhatsApp] Notificação enviada para admin: ${adminMessage.substring(0, 80)}...`);
         return { sent: true, whatsappLink };
       } else {
         console.error('[WhatsApp] Erro CallMeBot:', await response.text());
