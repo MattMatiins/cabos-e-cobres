@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     }
 
     const cleanCep = cep.replace(/\D/g, '');
-    const settings = getSettings();
+    const settings = await getSettings();
     const rates = settings.shippingRates || [];
 
     // Find state by CEP range

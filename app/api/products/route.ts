@@ -3,7 +3,7 @@ import { getProducts } from '@/lib/store';
 
 // Public endpoint — no auth required
 export async function GET() {
-  const products = getProducts();
+  const products = await getProducts();
   return NextResponse.json(products);
 }
 

@@ -11,9 +11,10 @@ export async function GET(req: NextRequest) {
 
   let order;
   if (orderId) {
-    order = getOrder(orderId);
+    order = await getOrder(orderId);
   } else if (trackingId) {
-    order = getOrders().find((o) => o.trackingId === trackingId);
+    const orders = await getOrders();
+    order = orders.find((o) => o.trackingId === trackingId);
   }
 
   if (!order) {

@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   if (!checkAdminAuth(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  return NextResponse.json(getProducts());
+  return NextResponse.json(await getProducts());
 }
 
 export async function POST(req: NextRequest) {
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const product = addProduct({
+    const product = await addProduct({
       id: `prod_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       slug: body.name
         .toLowerCase()
@@ -53,7 +53,7 @@ export async function PUT(req: NextRequest) {
     if (data.price) {
       data.priceFormatted = `R$ ${(data.price / 100).toFixed(2).replace('.', ',')}`;
     }
-    const updated = updateProduct(id, data);
+    const updated = await updateProduct(id, data);
     if (!updated) {
       return NextResponse.json({ error: 'Produto não encontrado' }, { status: 404 });
     }
@@ -70,7 +70,7 @@ export async function DELETE(req: NextRequest) {
 
   try {
     const { id } = await req.json();
-    const deleted = deleteProduct(id);
+    const deleted = await deleteProduct(id);
     if (!deleted) {
       return NextResponse.json({ error: 'Produto não encontrado' }, { status: 404 });
     }

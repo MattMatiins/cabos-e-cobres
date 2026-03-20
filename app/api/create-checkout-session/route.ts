@@ -6,7 +6,8 @@ export async function POST(req: NextRequest) {
   try {
     const { productId, quantity = 1 } = await req.json();
 
-    const product = getProducts().find((p) => p.id === productId);
+    const products = await getProducts();
+    const product = products.find((p) => p.id === productId);
     if (!product) {
       return NextResponse.json({ error: 'Produto não encontrado' }, { status: 404 });
     }

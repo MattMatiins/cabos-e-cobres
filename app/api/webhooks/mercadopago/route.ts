@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ ok: true });
       }
 
-      const settings = getSettings();
+      const settings = await getSettings();
       if (!settings.mercadoPagoAccessToken) {
         console.error('MP webhook: no access token configured');
         return NextResponse.json({ error: 'Not configured' }, { status: 500 });
@@ -40,10 +40,12 @@ export async function POST(req: NextRequest) {
 
       // Update order status based on payment status
       if (payment.status === 'approved') {
-        updateOrder(orderId, {
+        const orders = await getOrders();
+        const existingOrder = orders.find((o) => o.id === orderId);
+        await updateOrder(orderId, {
           status: 'pago',
           statusHistory: [
-            ...(getOrders().find((o) => o.id === orderId)?.statusHistory || []),
+            ...(existingOrder?.statusHistory || []),
             {
               status: 'pago',
               timestamp: new Date().toISOString(),

@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   if (!checkAdminAuth(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  const settings = getSettings();
+  const settings = await getSettings();
   // Mask sensitive keys
   return NextResponse.json({
     ...settings,
@@ -31,7 +31,7 @@ export async function PUT(req: NextRequest) {
     const body = await req.json();
 
     // Don't overwrite sensitive fields if they come back masked
-    const currentSettings = getSettings();
+    const currentSettings = await getSettings();
     if (body.stripeSecretKey && body.stripeSecretKey.startsWith('****')) {
       body.stripeSecretKey = currentSettings.stripeSecretKey;
     }
@@ -42,7 +42,7 @@ export async function PUT(req: NextRequest) {
       body.smsApiKey = currentSettings.smsApiKey;
     }
 
-    const updated = updateSettings(body);
+    const updated = await updateSettings(body);
     return NextResponse.json({
       ...updated,
       stripeSecretKey: updated.stripeSecretKey ? '****' + updated.stripeSecretKey.slice(-4) : '',

@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   if (!checkAdminAuth(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  return NextResponse.json(getOrders());
+  return NextResponse.json(await getOrders());
 }
 
 export async function PATCH(req: NextRequest) {
@@ -24,7 +24,7 @@ export async function PATCH(req: NextRequest) {
   try {
     const { orderId, status, trackingCode }: { orderId: string; status?: OrderStatus; trackingCode?: string } = await req.json();
 
-    const existing = getOrder(orderId);
+    const existing = await getOrder(orderId);
     if (!existing) {
       return NextResponse.json({ error: 'Pedido não encontrado' }, { status: 404 });
     }
@@ -47,7 +47,7 @@ export async function PATCH(req: NextRequest) {
       ];
     }
 
-    const updated = updateOrder(orderId, updates);
+    const updated = await updateOrder(orderId, updates);
     if (!updated) {
       return NextResponse.json({ error: 'Erro ao atualizar' }, { status: 500 });
     }

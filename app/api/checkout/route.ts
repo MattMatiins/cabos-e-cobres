@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { getProducts, createOrder, getSettings } from '@/lib/store';
 import type { DeliveryMethod, Order } from '@/lib/types';
+import { Product } from '@/lib/products';
 
 // ── Stripe Checkout ──────────────────────────────────────────────
 async function createStripeCheckout(
@@ -12,7 +13,8 @@ async function createStripeCheckout(
   customerEmail: string,
   customerPhone: string,
   shippingAddress: string,
-  origin: string
+  origin: string,
+  products: Product[]
 ) {
   if (!stripe) {
     throw new Error('Stripe não está configurado. Verifique suas chaves no painel de administração.');
@@ -20,7 +22,7 @@ async function createStripeCheckout(
 
   const lineItems = items
     .map((item) => {
-      const product = getProducts().find((p) => p.id === item.productId);
+      const product = products.find((p) => p.id === item.productId);
       if (!product) return null;
       return {
         price_data: {
@@ -70,11 +72,12 @@ async function createMercadoPagoCheckout(
   customerName: string,
   customerEmail: string,
   origin: string,
-  accessToken: string
+  accessToken: string,
+  products: Product[]
 ) {
   const mpItems = items
     .map((item) => {
-      const product = getProducts().find((p) => p.id === item.productId);
+      const product = products.find((p) => p.id === item.productId);
       if (!product) return null;
       const httpImage = product.images.find((img: string) => img.startsWith('http'));
       const mpItem: any = {
@@ -208,11 +211,12 @@ export async function POST(req: NextRequest) {
     const origin = req.headers.get('origin') || 'http://localhost:3000';
     const orderId = `ORD-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
     const trackingId = generateTrackingId();
-    const settings = getSettings();
+    const settings = await getSettings();
+    const products = await getProducts();
 
     // Calculate total
     const total = items.reduce((sum, item) => {
-      const product = getProducts().find((p) => p.id === item.productId);
+      const product = products.find((p) => p.id === item.productId);
       return sum + (product ? product.price * item.quantity : 0);
     }, 0);
 
@@ -222,7 +226,7 @@ export async function POST(req: NextRequest) {
       trackingId,
       items: items
         .map((item) => {
-          const product = getProducts().find((p) => p.id === item.productId);
+          const product = products.find((p) => p.id === item.productId);
           if (!product) return null;
           return {
             productId: product.id,
@@ -263,7 +267,8 @@ export async function POST(req: NextRequest) {
         customerName,
         customerEmail,
         origin,
-        settings.mercadoPagoAccessToken
+        settings.mercadoPagoAccessToken,
+        products
       );
     } else {
       checkoutResult = await createStripeCheckout(
@@ -274,12 +279,13 @@ export async function POST(req: NextRequest) {
         customerEmail,
         customerPhone,
         shippingAddress || '',
-        origin
+        origin,
+        products
       );
       order.stripeSessionId = checkoutResult.sessionId;
     }
 
-    createOrder(order);
+    await createOrder(order);
 
     return NextResponse.json({ url: checkoutResult.url, orderId, trackingId, preferenceId: checkoutResult.preferenceId });
   } catch (error: any) {

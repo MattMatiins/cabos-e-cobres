@@ -28,11 +28,13 @@ export async function POST(req: NextRequest) {
       const orderId = session.metadata?.orderId;
 
       if (orderId) {
-        const updated = updateOrder(orderId, {
+        const orders = await getOrders();
+        const existingOrder = orders.find((o) => o.id === orderId);
+        const updated = await updateOrder(orderId, {
           status: 'pago',
           stripeSessionId: session.id,
           statusHistory: [
-            ...(getOrders().find((o) => o.id === orderId)?.statusHistory || []),
+            ...(existingOrder?.statusHistory || []),
             { status: 'pago', timestamp: new Date().toISOString(), note: 'Pagamento confirmado via Stripe' },
           ],
         });

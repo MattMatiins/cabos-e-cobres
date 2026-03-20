@@ -4,7 +4,7 @@ import { trackVisitor, getVisitorStats } from '@/lib/store';
 export async function POST(req: NextRequest) {
   try {
     const { page, sessionId } = await req.json();
-    trackVisitor({
+    await trackVisitor({
       id: sessionId || Math.random().toString(36).slice(2),
       page: page || '/',
       timestamp: new Date().toISOString(),
@@ -17,5 +17,5 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json(getVisitorStats());
+  return NextResponse.json(await getVisitorStats());
 }

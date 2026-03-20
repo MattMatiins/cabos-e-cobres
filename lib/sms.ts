@@ -11,8 +11,8 @@ function formatMessage(template: string, order: Order): string {
 }
 
 // Generate a WhatsApp link for the admin to send manually
-export function generateWhatsAppLink(order: Order, newStatus: OrderStatus): string {
-  const settings = getSettings();
+export async function generateWhatsAppLink(order: Order, newStatus: OrderStatus): Promise<string> {
+  const settings = await getSettings();
   const messageKey =
     newStatus === 'pronto' && order.deliveryMethod === 'retirada'
       ? 'retirada_pronto'
@@ -29,8 +29,8 @@ export function generateWhatsAppLink(order: Order, newStatus: OrderStatus): stri
 }
 
 export async function sendOrderNotification(order: Order, newStatus: OrderStatus): Promise<{ sent: boolean; whatsappLink: string }> {
-  const settings = getSettings();
-  const whatsappLink = generateWhatsAppLink(order, newStatus);
+  const settings = await getSettings();
+  const whatsappLink = await generateWhatsAppLink(order, newStatus);
 
   const messageKey =
     newStatus === 'pronto' && order.deliveryMethod === 'retirada'
