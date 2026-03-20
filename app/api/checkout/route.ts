@@ -171,6 +171,16 @@ async function createMercadoPagoCheckout(
   return { url: checkoutUrl, preferenceId: data.id };
 }
 
+// ── Tracking ID Generator ────────────────────────────────────────
+function generateTrackingId(): string {
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // sem 0/O/I/L/1
+  let code = '';
+  for (let i = 0; i < 6; i++) {
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return `CC-${code}`;
+}
+
 // ── Main Handler ─────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   try {
@@ -197,6 +207,7 @@ export async function POST(req: NextRequest) {
 
     const origin = req.headers.get('origin') || 'http://localhost:3000';
     const orderId = `ORD-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+    const trackingId = generateTrackingId();
     const settings = getSettings();
 
     // Calculate total
@@ -208,6 +219,7 @@ export async function POST(req: NextRequest) {
     // Create order
     const order: Order = {
       id: orderId,
+      trackingId,
       items: items
         .map((item) => {
           const product = getProducts().find((p) => p.id === item.productId);
@@ -269,7 +281,7 @@ export async function POST(req: NextRequest) {
 
     createOrder(order);
 
-    return NextResponse.json({ url: checkoutResult.url, orderId, preferenceId: checkoutResult.preferenceId });
+    return NextResponse.json({ url: checkoutResult.url, orderId, trackingId, preferenceId: checkoutResult.preferenceId });
   } catch (error: any) {
     console.error('Erro ao criar checkout:', error);
     return NextResponse.json(

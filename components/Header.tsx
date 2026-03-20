@@ -39,7 +39,7 @@ export default function Header() {
           {[
             { label: 'Início', href: '/' },
             { label: 'Catálogo', href: '#produtos' },
-            { label: 'Sobre', href: '#sobre' },
+            { label: 'Rastrear Pedido', href: '/rastreio' },
             { label: 'Contato', href: '#contato' },
           ].map((link) => (
             <Link
@@ -86,7 +86,7 @@ export default function Header() {
           {[
             { label: 'Início', href: '/' },
             { label: 'Catálogo', href: '#produtos' },
-            { label: 'Sobre', href: '#sobre' },
+            { label: 'Rastrear Pedido', href: '/rastreio' },
             { label: 'Contato', href: '#contato' },
           ].map((link) => (
             <Link

@@ -141,7 +141,7 @@ export default function AdminOrders() {
                       )}
                     </div>
                     <p className="text-xs text-gray-500">
-                      #{order.id.slice(-6).toUpperCase()} - {order.items?.length || 0} itens - {order.customerPhone}
+                      <span className="text-orange-400/70 font-mono">{order.trackingId || order.id.slice(-6).toUpperCase()}</span> — {order.items?.length || 0} itens — {order.customerPhone}
                     </p>
                   </div>
                   <div className="text-right flex-shrink-0">
@@ -163,9 +163,10 @@ export default function AdminOrders() {
           <div className="lg:col-span-2">
             <div className="bg-[#111] border border-[#222] rounded-2xl p-6 sticky top-8">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="font-bold text-lg">
-                  #{selected.id.slice(-6).toUpperCase()}
-                </h2>
+                <div>
+                  <h2 className="font-bold text-lg">{selected.trackingId || `#${selected.id.slice(-6).toUpperCase()}`}</h2>
+                  <p className="text-gray-600 text-[0.6rem] font-mono">{selected.id}</p>
+                </div>
                 <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-white">
                   <svg width={18} height={18} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path d="M18 6L6 18M6 6l12 12" />

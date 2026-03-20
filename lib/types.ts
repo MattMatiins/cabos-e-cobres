@@ -9,6 +9,7 @@ export interface CartItem {
 
 export interface Order {
   id: string;
+  trackingId: string;
   items: {
     productId: string;
     name: string;
