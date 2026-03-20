@@ -37,6 +37,7 @@ export default function AdminSettings() {
       stripeSecretKey: '',
       stripePublishableKey: '',
       mercadoPagoAccessToken: '',
+      mercadoPagoPublicKey: '',
       smsApiKey: '',
       smsFromNumber: '',
       messages: { ...DEFAULT_MESSAGES },
@@ -180,6 +181,19 @@ export default function AdminSettings() {
                 />
                 <p className="text-gray-600 text-[10px] mt-1.5">
                   Obtenha em: Mercado Pago → Seu negócio → Configurações → Credenciais
+                </p>
+              </div>
+              <div>
+                <label className="block text-gray-400 text-xs mb-1.5">Public Key (Mercado Pago)</label>
+                <input
+                  type="text"
+                  value={settings.mercadoPagoPublicKey || ''}
+                  onChange={(e) => setSettings({ ...settings, mercadoPagoPublicKey: e.target.value })}
+                  placeholder="APP_USR-... ou TEST-..."
+                  className="w-full bg-[#161616] border border-[#222] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 font-mono"
+                />
+                <p className="text-gray-600 text-[10px] mt-1.5">
+                  Chave pública para pagamento inline. Mesma página de credenciais do Mercado Pago.
                 </p>
               </div>
             </div>

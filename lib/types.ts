@@ -49,6 +49,7 @@ export interface StoreSettings {
   stripeSecretKey: string;
   stripePublishableKey: string;
   mercadoPagoAccessToken: string;
+  mercadoPagoPublicKey: string;
   smsApiKey: string;
   smsFromNumber: string;
   shippingRates: ShippingRate[];

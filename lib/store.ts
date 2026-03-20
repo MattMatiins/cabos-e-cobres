@@ -24,6 +24,7 @@ function getStore(): Store {
         stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
         stripePublishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
         mercadoPagoAccessToken: process.env.MERCADOPAGO_ACCESS_TOKEN || '',
+        mercadoPagoPublicKey: process.env.MERCADOPAGO_PUBLIC_KEY || '',
         smsApiKey: process.env.SMS_API_KEY || '',
         smsFromNumber: process.env.SMS_FROM_NUMBER || '',
         shippingRates: [...SHIPPING_STATES],

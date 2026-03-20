@@ -269,7 +269,7 @@ export async function POST(req: NextRequest) {
 
     createOrder(order);
 
-    return NextResponse.json({ url: checkoutResult.url, orderId });
+    return NextResponse.json({ url: checkoutResult.url, orderId, preferenceId: checkoutResult.preferenceId });
   } catch (error: any) {
     console.error('Erro ao criar checkout:', error);
     return NextResponse.json(
